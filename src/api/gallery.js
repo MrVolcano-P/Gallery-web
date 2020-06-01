@@ -4,8 +4,12 @@ const host = "http://localhost:8080"
 export function listGallery() {
     return axios.get(`${host}/gallerys`)
 }
-export function addGallery(data) {
-    return axios.post(`${host}/gallerys`, data)
+export function addGallery(data,token) {
+    return axios.post(`${host}/gallerys`, data,{
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
 }
 export function deleteGallery(id) {
     return axios.delete(`${host}/gallerys/${id}`)

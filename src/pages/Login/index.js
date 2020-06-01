@@ -53,7 +53,7 @@ export default () => {
                                         .then(res => {
                                             console.log(res.data)
                                             dispatch(setAuthToken(res.data.token))
-                                            history.push("/admin")
+                                            history.push("/")
                                         })
                                         .catch(err => console.log(err))
                                 }}

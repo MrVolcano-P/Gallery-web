@@ -6,14 +6,16 @@ import * as serviceWorker from './serviceWorker';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import combineReducers from './reducer'
+import { PersistGate } from 'redux-persist/integration/react'
+import configureStore from './store'
 
-const store = createStore(combineReducers)
+const { store, persistor } = configureStore()
 
 const MyApp = () => (
   <Provider store={store}>
-    <App />
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>
 )
 ReactDOM.render(
