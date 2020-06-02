@@ -1,19 +1,29 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import Gallery from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
-import { Typography, Row, Col, Button, Divider } from 'antd';
+import { Typography, Row, Col, Button, Divider, Switch } from 'antd';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
 import { getGalleryByid, getImagesByGalleryID } from '../../api/gallery';
+import { Link } from 'react-router-dom';
+import SelectedImage from './selectedImage';
+import ModalAddImage from './modalAddImage';
 export default (props) => {
     const token = useSelector(state => state.authToken)
     const [gallery, setGallery] = useState({})
+    const [currentImage, setCurrentImage] = useState(0);
+    const [viewerIsOpen, setViewerIsOpen] = useState(false);
     const [images, setImages] = useState([])
+    const [name, setName] = useState('')
+    const [selectAll, setSelectAll] = useState(false);
+    const [checked, setChecked] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false)
     const fetchGallery = () => {
         getGalleryByid(props.match.params.id)
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 setGallery(res.data)
+                setName(res.data.name)
                 fetchImages(res.data.id)
             })
             .catch(err => console.log(err))
@@ -21,7 +31,6 @@ export default (props) => {
     const fetchImages = (id) => {
         getImagesByGalleryID(id)
             .then(res => {
-                // console.log(res.data)
                 let temp = []
                 res.data.map(d => {
                     temp.push({
@@ -40,80 +49,100 @@ export default (props) => {
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
     }
+    const openLightbox = useCallback((event, { photo, index }) => {
+        setCurrentImage(index);
+        setViewerIsOpen(true);
+    }, []);
 
+    const closeLightbox = () => {
+        setCurrentImage(0);
+        setViewerIsOpen(false);
+    };
+    const onChange = str => {
+        console.log('Content change:', str);
+        setName(str)
+    };
+    const toggleSelectAll = () => {
+        setSelectAll(!selectAll);
+    };
+
+    const imageRenderer = useCallback(
+        ({ index, left, top, key, photo }) => (
+            <SelectedImage
+                selected={selectAll ? true : false}
+                key={key}
+                margin={"2px"}
+                index={index}
+                photo={photo}
+                left={left}
+                top={top}
+            />
+        ),
+        [selectAll]
+    );
     useEffect(() => {
         fetchGallery()
     }, [])
-    console.log(images)
+    console.log(name)
     return (
         <>
             <Row justify='center'>
                 <Col span={16}>
                     <Row style={{}} justify='space-between' align="middle">
                         <Col>
-                            <Typography.Title level={3}>&nbsp;{gallery.name}</Typography.Title>
+                            <div style={{ display: 'flex' }}>
+                                <Typography.Title editable={{ onChange: onChange }} level={3} type='secondary'>
+                                    {name}
+                                </Typography.Title>
+                            </div>
+
+                        </Col>
+                        <Col>
+                            <Typography.Text>Mode </Typography.Text>
+                            <Switch checkedChildren="Delete" unCheckedChildren="View" onChange={(checked) => setChecked(checked)} />&nbsp;
+
+                            {/* <Button onClick={toggleSelectAll}>toggle select all</Button> */}
+                            {checked ?
+                                <Button>Delete</Button>
+                                :
+                                null
+                            }
                         </Col>
                         <Col >
-                            <Button>Add Images</Button>&nbsp;
-                                <Button>Publish</Button>&nbsp;
-                                <Button>Edit</Button>&nbsp;
+                            <Button onClick={() => setModalVisible(true)}>Add Images</Button>&nbsp;
+                            <Link to={"/gallery/" + props.match.params.id}><Button>Done</Button></Link>&nbsp;
                         </Col>
                     </Row>
                 </Col>
             </Row>
             <Row justify='center'>
                 <Col span={20}>
-                    <Gallery photos={images} />
+
+                    {checked ?
+                        <Gallery photos={images} renderImage={imageRenderer} />
+                        :
+                        <Gallery photos={images} onClick={openLightbox} />
+                    }
+                    <ModalGateway>
+                        {viewerIsOpen ? (
+                            <Modal onClose={closeLightbox}>
+                                <Carousel
+                                    currentIndex={currentImage}
+                                    views={images.map(x => ({
+                                        ...x,
+                                        srcset: x.srcSet,
+                                        caption: x.title
+                                    }))}
+                                />
+                            </Modal>
+                        ) : null}
+                    </ModalGateway>
+                    <ModalAddImage visible={modalVisible} setVisible={(v) => setModalVisible(v)} />
                 </Col>
             </Row>
-            <Divider dashed />
+
+            <br />
+            <br />
         </>
     )
 }
-// const photos = [
-//     {
-//         src: "http://localhost:8080/upload/1/_X9QyTVRRAHXiWjM7LVR4Jzki7zY511YouJxEYO-HEc.jpg",
-//         width: 4,
-//         height: 3
-//     },
-//     {
-//         src: "http://localhost:8080/upload\\1\\Vfd8AjVODxh2j2-gGGJ1mW3WzS_TYIXc_thSUbtXJ94.jpg",
-//         width: 1,
-//         height: 1
-//     },
-//     {
-//         src: "https://source.unsplash.com/qDkso9nvCg0/600x799",
-//         width: 8,
-//         height: 6
-//     },
-//     {
-//         src: "https://source.unsplash.com/iecJiKe_RNg/600x799",
-//         width: 3,
-//         height: 4
-//     },
-//     {
-//         src: "https://source.unsplash.com/epcsn8Ed8kY/600x799",
-//         width: 3,
-//         height: 4
-//     },
-//     {
-//         src: "https://source.unsplash.com/NQSWvyVRIJk/800x599",
-//         width: 4,
-//         height: 3
-//     },
-//     {
-//         src: "https://source.unsplash.com/zh7GEuORbUw/600x799",
-//         width: 3,
-//         height: 4
-//     },
-//     {
-//         src: "https://source.unsplash.com/PpOHJezOalU/800x599",
-//         width: 4,
-//         height: 3
-//     },
-//     {
-//         src: "https://source.unsplash.com/I1ASdgphUH4/800x599",
-//         width: 4,
-//         height: 3
-//     }
-// ];

@@ -5,6 +5,7 @@ import { Typography, Row, Col, Button, Divider } from 'antd';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
 import { getGalleryByid, getImagesByGalleryID } from '../../api/gallery';
+import { Link } from 'react-router-dom';
 export default (props) => {
     const token = useSelector(state => state.authToken)
     const [currentImage, setCurrentImage] = useState(0);
@@ -64,9 +65,8 @@ export default (props) => {
                             <Typography.Title level={3}>&nbsp;{gallery.name}</Typography.Title>
                         </Col>
                         <Col >
-                            <Button>Add Images</Button>&nbsp;
-                                <Button>Publish</Button>&nbsp;
-                                <Button>Edit</Button>&nbsp;
+                            <Button>Publish</Button>&nbsp;
+                                <Link to={"/gallery/" + props.match.params.id + "/edit"}><Button>Edit</Button></Link>&nbsp;
                         </Col>
                     </Row>
                 </Col>
@@ -90,7 +90,8 @@ export default (props) => {
                     </Modal>
                 ) : null}
             </ModalGateway>
-            <Divider dashed />
+            <br />
+            <br />
         </>
     )
 }

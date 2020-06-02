@@ -6,12 +6,14 @@ import nav from '../nav';
 import Gallery from '../pages/Gallery';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
+import EditGallery from '../pages/EditGallery';
 export default () => (
     <BrowserRouter>
         <Route path="/" component={nav} />
         <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/gallery/:id" component={Gallery} />
+            <Route exact path="/gallery/:id/edit" component={EditGallery} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
         </Switch>
