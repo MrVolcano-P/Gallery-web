@@ -7,8 +7,6 @@ import { useSelector } from 'react-redux';
 import { getGalleryByid, getImagesByGalleryID } from '../../api/gallery';
 export default (props) => {
     const token = useSelector(state => state.authToken)
-    const [currentImage, setCurrentImage] = useState(0);
-    const [viewerIsOpen, setViewerIsOpen] = useState(false);
     const [gallery, setGallery] = useState({})
     const [images, setImages] = useState([])
     const fetchGallery = () => {
@@ -42,15 +40,7 @@ export default (props) => {
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
     }
-    const openLightbox = useCallback((event, { photo, index }) => {
-        setCurrentImage(index);
-        setViewerIsOpen(true);
-    }, []);
 
-    const closeLightbox = () => {
-        setCurrentImage(0);
-        setViewerIsOpen(false);
-    };
     useEffect(() => {
         fetchGallery()
     }, [])
@@ -73,23 +63,9 @@ export default (props) => {
             </Row>
             <Row justify='center'>
                 <Col span={20}>
-                    <Gallery photos={images} onClick={openLightbox} />
+                    <Gallery photos={images} />
                 </Col>
             </Row>
-            <ModalGateway>
-                {viewerIsOpen ? (
-                    <Modal onClose={closeLightbox}>
-                        <Carousel
-                            currentIndex={currentImage}
-                            views={images.map(x => ({
-                                ...x,
-                                srcset: x.srcSet,
-                                caption: x.title
-                            }))}
-                        />
-                    </Modal>
-                ) : null}
-            </ModalGateway>
             <Divider dashed />
         </>
     )

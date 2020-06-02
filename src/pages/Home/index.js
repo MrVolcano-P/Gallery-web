@@ -5,15 +5,15 @@ import { Card, Col, Row } from 'antd';
 import ReactList from 'react-list';
 import { ListGroup } from 'react-bootstrap'
 import ListGallery from './list'
-import { listGallery, addGallery, deleteGallery } from '../../api/gallery'
+import { listAllGalleries, addGallery, deleteGallery } from '../../api/gallery'
 import { useSelector } from 'react-redux';
 export default () => {
     const token = useSelector(state => state.authToken)
     console.log('token', token)
     const [name, setName] = useState('')
     const [gallerys, setGallerys] = useState([])
-    const fetchTask = () => {
-        listGallery()
+    const fetchGallerys = () => {
+        listAllGalleries()
             .then(data => {
                 console.log(data)
                 setGallerys(data.data)
@@ -21,13 +21,13 @@ export default () => {
             .catch(err => console.log(err))
     }
     const AddGallery = useCallback(() => {
-        addGallery({ Name: name }, token).then(() => fetchTask())
+        addGallery({ Name: name }, token).then(() => fetchGallerys())
     }, [name])
     const DeleteGallery = useCallback((id) => {
-        deleteGallery(id).then(() => fetchTask())
+        deleteGallery(id).then(() => fetchGallerys())
     })
     useEffect(() => {
-        fetchTask()
+        fetchGallerys()
     }, [])
     console.log(token)
     return (

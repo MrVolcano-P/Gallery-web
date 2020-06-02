@@ -39,7 +39,10 @@ export default function ListGallery(props) {
                 <Row justify='start'>
                     <Col span={20}>
                         <Row>
-                            <Typography.Title level={3}><a href="https://ant.design">{item.name}</a></Typography.Title>
+                            <Typography.Title level={3}>
+                                <Link to={"/gallery/" + item.id}>
+                                    {item.name}
+                                </Link></Typography.Title>
                         </Row>
                         <Row>
                             <Typography.Text>
