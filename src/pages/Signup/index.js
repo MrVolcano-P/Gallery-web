@@ -2,7 +2,9 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import styles from './style'
 import { login } from '../../api/gallery';
+import { useHistory } from 'react-router-dom'
 const Button = styled.button`
   background-color: #942A96 !important;
   color: #fff !important;
@@ -12,25 +14,6 @@ const Button = styled.button`
     background-color: #872589 !important;
   }
 `
-
-const styles = {
-    row: {
-        marginTop: '8rem'
-    },
-    txt1: {
-        fontFamily: 'Roboto',
-        fontSize: '2.2rem',
-        color: '#fff',
-        marginBottom: '1rem',
-        fontWeight: '700',
-        textAlign: 'center'
-    },
-    txt2: {
-        fontFamily: 'Roboto',
-        fontSize: '1rem',
-        color: '#fff',
-    }
-}
 
 const RegisterSchema = Yup.object().shape({
     name: Yup.string()
@@ -53,13 +36,14 @@ const RegisterSchema = Yup.object().shape({
 });
 
 export default () => {
+    const history = useHistory();
     return (
         <div>
             <div className="row justify-content-center" style={styles.row}>
                 <div className="col-md-3">
                     <div className="row justify-content-center">
                         <div className="col-md-12" style={styles.txt1}>
-                            REGISTER
+                            Signup
                         </div>
                         <div className="col-md-12">
                             <Formik
@@ -78,7 +62,7 @@ export default () => {
                                 {({ errors, touched }) => (
                                     <Form>
                                         <div className="form-group">
-                                            <label htmlFor="name" style={styles.txt2}>Email address</label>
+                                            <label htmlFor="name" style={styles.txt2}>Name</label>
                                             <Field
                                                 name="name"
                                                 type="text"
@@ -121,6 +105,8 @@ export default () => {
                                             <ErrorMessage component="div" name="confirmPassword" className="invalid-feedback" />
                                         </div>
                                         <button type="submit" className="btn btn-success" style={{ width: '100%' }}>SUBMIT</button>
+                                        <div style={{ height: 10 }} />
+                                        <button onClick={() => history.push("/login")} className="btn btn-secondary" style={{ width: '100%' }}>Login</button>
                                     </Form>
                                 )}
                             </Formik>

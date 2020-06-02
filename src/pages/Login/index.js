@@ -82,6 +82,8 @@ export default () => {
                                             <ErrorMessage component="div" name="password" className="invalid-feedback" />
                                         </div>
                                         <button type="submit" className="btn btn-success" style={{ width: '100%' }}>Login</button>
+                                        <div style={{ height: 10 }} />
+                                        <button onClick={() => history.push("/signup")} className="btn btn-secondary" style={{ width: '100%' }}>Signup</button>
                                     </Form>
                                 )}
                             </Formik>

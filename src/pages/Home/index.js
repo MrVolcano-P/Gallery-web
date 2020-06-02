@@ -31,31 +31,38 @@ export default () => {
     }, [])
     console.log(token)
     return (
-        <Row justify={"center"}>
-            <Col span={20}>
-                {token === null ?
-                    <>
-                    </>
-                    :
-                    <Row justify={"center"}>
-                        <Col>
-                            <Typography.Text>Gallery :&nbsp; </Typography.Text>
-                        </Col>
-                        <Col>
-                            <Input value={name} onChange={(e) => setName(e.target.value)} />
-                        </Col>
-                        <Col>
-                            &nbsp;&nbsp;<Button onClick={AddGallery}>Add</Button>
-                        </Col>
-                    </Row>
-                }
-                <ListGallery
-                    data={gallerys}
-                    delete={DeleteGallery}
-                />
-            </Col>
+        <>
+            <Row justify={"center"}>
+                <Col span={20}>
+                    {token === null ?
+                        <>
+                        </>
+                        :
+                        <Row justify={"center"}>
+                            <Col>
+                                <Typography.Text>Gallery :&nbsp; </Typography.Text>
+                            </Col>
+                            <Col>
+                                <Input value={name} onChange={(e) => setName(e.target.value)} />
+                            </Col>
+                            <Col>
+                                &nbsp;&nbsp;<Button onClick={AddGallery}>Add</Button>
+                            </Col>
+                        </Row>
+                    }
 
-        </Row >
+                </Col>
+            </Row >
+            <Row justify={"center"}>
+                <Col span={16}>
+                    <ListGallery
+                        data={gallerys}
+                        delete={DeleteGallery}
+                    />
+                </Col>
+            </Row>
+
+        </>
     )
 }
 
