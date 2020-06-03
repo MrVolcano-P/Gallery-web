@@ -3,6 +3,7 @@ import { Modal, Button, Row } from 'antd'
 import { Upload, message } from 'antd';
 import { upload } from '../../api/gallery';
 import { useSelector } from 'react-redux';
+import { InboxOutlined } from '@ant-design/icons';
 export default function ModalAddImage(props) {
     const token = useSelector(state => state.authToken)
     const [antImages, setAntImages] = useState([]);
@@ -49,7 +50,7 @@ export default function ModalAddImage(props) {
             <>
                 <Upload.Dragger {...propsDrag}>
                     <p className="ant-upload-drag-icon">
-                        {/* <InboxOutlined /> */}
+                        <InboxOutlined />
                     </p>
                     <p className="ant-upload-text">Click or drag file to this area to upload</p>
                     <p className="ant-upload-hint">

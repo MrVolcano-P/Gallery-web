@@ -4,9 +4,10 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import styles from './style'
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../../api/gallery';
+import { login, getProfile } from '../../api/gallery';
 import { setAuthToken } from '../../action/authToken'
 import { useHistory } from 'react-router-dom'
+import { setProfile } from '../../action/profile'
 const Button = styled.button`
     background-color: #942A96 !important;
     color: #fff !important;
@@ -28,9 +29,16 @@ const RegisterSchema = Yup.object().shape({
 
 export default () => {
     const dispatch = useDispatch()
-    const token = useSelector(state => state.authToken)
-    console.log('token', token)
     const history = useHistory();
+    const SetProfile = (token) => {
+        getProfile(token)
+            .then(res => {
+                console.log(res.data)
+                dispatch(setProfile(res.data))
+                history.push("/")
+            })
+            .catch(err => console.log(err))
+    }
     return (
         <div>
             <div className="row justify-content-center" style={styles.row}>
@@ -53,7 +61,8 @@ export default () => {
                                         .then(res => {
                                             console.log(res.data)
                                             dispatch(setAuthToken(res.data.token))
-                                            history.push("/")
+                                            SetProfile(res.data.token)
+
                                         })
                                         .catch(err => console.log(err))
                                 }}

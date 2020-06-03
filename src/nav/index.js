@@ -3,8 +3,10 @@ import { Layout, Menu, Button, Dropdown } from 'antd';
 import { Typography } from 'antd';
 import { Link, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, MailOutlined, SettingOutlined, CaretDownOutlined, LogoutOutlined } from '@ant-design/icons';
 import { setAuthToken } from "../action/authToken";
+import { logout } from "../api/gallery";
+import { setProfile } from "../action/profile";
 
 const { SubMenu } = Menu;
 const { Title } = Typography;
@@ -14,14 +16,23 @@ const { Header, Content, Footer } = Layout;
 export default () => {
     const dispatch = useDispatch()
     const token = useSelector(state => state.authToken)
+    const profile = useSelector(state => state.profile)
+    const logOut = () => {
+        console.log('logout')
+        logout(token)
+            .then(res => {
+                dispatch(setAuthToken(null))
+                dispatch(setProfile(null))
+            })
+    }
     const menu = (
         <Menu>
             <Menu.Item>
-                <a onClick={() => dispatch(setAuthToken(null))}>
-                    LogOut
+                <a onClick={logOut}>
+                    LogOut &nbsp; <LogoutOutlined style={{ fontSize: '18px', color: '#08c' }} />
                 </a>
             </Menu.Item>
-        </Menu>
+        </Menu >
     );
     return (
         <Layout>
@@ -35,9 +46,12 @@ export default () => {
                             <Button>Login</Button>
                         </Link>
                         :
-                        <Dropdown overlay={menu} placement="bottomLeft">
-                            <Button>bottomLeft</Button>
-                        </Dropdown>
+                        <>
+                            <Link to="/gallery/owner/all" ><Button>My Gallery</Button></Link>
+                            <Dropdown overlay={menu} placement="bottomLeft">
+                                <Button>{profile.name}<CaretDownOutlined style={{ fontSize: '24px', color: '#08c' }} /></Button>
+                            </Dropdown>
+                        </>
                     }
 
                 </div>

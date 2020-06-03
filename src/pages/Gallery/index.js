@@ -68,6 +68,7 @@ export default (props) => {
         <>
             <Row justify='center'>
                 <Col span={16}>
+                    <Divider />
                     <Row style={{}} justify='space-between' align="middle">
                         <Col>
                             <Row>
@@ -87,8 +88,10 @@ export default (props) => {
                                 <Link to={"/gallery/" + props.match.params.id + "/edit"}><Button>Edit</Button></Link>&nbsp;
                         </Col>
                     </Row>
+                    <Divider />
                 </Col>
             </Row>
+
             <Row justify='center'>
                 <Col span={20}>
                     <Gallery photos={images} onClick={openLightbox} />
