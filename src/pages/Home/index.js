@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { List } from 'antd/lib/form/Form'
 import { Typography, Divider, Table, Input, Button } from 'antd'
 import { Card, Col, Row } from 'antd';
 import ReactList from 'react-list';
 import { ListGroup } from 'react-bootstrap'
-import ListGallery from './list'
+import List from '../../components/List'
+import ModalAddGallery from '../../components/ModalAddGallery'
 import { listAllGalleries, addGallery, deleteGallery } from '../../api/gallery'
 import { useSelector } from 'react-redux';
 export default () => {
     const token = useSelector(state => state.authToken)
     const profile = useSelector(state => state.profile)
+    const [modalVisible, setModalVisible] = useState(false)
     console.log('token', token)
     const [name, setName] = useState('')
     const [gallerys, setGallerys] = useState([])
@@ -24,9 +25,7 @@ export default () => {
     const AddGallery = useCallback(() => {
         addGallery({ Name: name }, token).then(() => fetchGallerys())
     }, [name])
-    const DeleteGallery = useCallback((id) => {
-        deleteGallery(id).then(() => fetchGallerys())
-    })
+    
     useEffect(() => {
         fetchGallerys()
     }, [])
@@ -34,35 +33,36 @@ export default () => {
     return (
         <>
             <Row justify={"center"}>
-                <Col span={20}>
-                    {token === null ?
-                        <>
-                        </>
-                        :
-                        <Row justify={"center"}>
-                            <Col>
-                                <Typography.Title>List All Gallery </Typography.Title>
-                            </Col>
-                            {/* <Col>
-                                <Input value={name} onChange={(e) => setName(e.target.value)} />
-                            </Col>
-                            <Col>
-                                &nbsp;&nbsp;<Button onClick={AddGallery}>Add</Button>
-                            </Col> */}
-                        </Row>
-                    }
+                <Col span={14}>
+                    <Row justify='space-between' align="middle">
+                        <Col>
+                            <Typography.Title level={2}>List All Gallery </Typography.Title>
+                        </Col>
+                        <Col>
+                            {token === null ?
+                                null
+                                :
+                                <Button onClick={() => setModalVisible(true)} >Add</Button>
+                            }
+                        </Col>
+                    </Row>
 
                 </Col>
             </Row >
             <Row justify={"center"}>
                 <Col span={16}>
-                    <ListGallery
+                    <List
                         data={gallerys}
-                        delete={DeleteGallery}
+                        // delete={DeleteGallery}
                     />
                 </Col>
             </Row>
-
+            <ModalAddGallery
+                visible={modalVisible}
+                setVisible={setModalVisible}
+            // galleryId={gallery.id}
+            // fetchImages={() => fetchImages(gallery.id)} 
+            />
         </>
     )
 }

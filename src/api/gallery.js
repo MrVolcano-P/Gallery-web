@@ -39,8 +39,12 @@ export function publishGallery(id, data, token) {
         }
     })
 }
-export function deleteGallery(id) {
-    return axios.delete(`${host}/user/galleries/${id}`)
+export function deleteGallery(id, token) {
+    return axios.delete(`${host}/user/galleries/${id}`, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
 }
 export function login(data) {
     return axios.post(`${host}/login`, data)

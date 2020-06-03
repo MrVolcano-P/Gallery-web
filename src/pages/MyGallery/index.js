@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { List } from 'antd/lib/form/Form'
 import { Typography, Divider, Table, Input, Button } from 'antd'
 import { Card, Col, Row } from 'antd';
 import ReactList from 'react-list';
 import { ListGroup } from 'react-bootstrap'
-import ListGallery from './list'
+import List from '../../components/List'
 import { listAllGalleries, addGallery, deleteGallery, getGalleryByToken } from '../../api/gallery'
 import { useSelector } from 'react-redux';
 export default () => {
@@ -31,21 +30,18 @@ export default () => {
     return (
         <>
             <Row justify={"center"}>
-                <Col span={20}>
+                <Col span={14}>
                     {token === null ?
                         <>
                         </>
                         :
-                        <Row justify={"center"}>
+                        <Row justify='space-between' align='middle'>
                             <Col>
                                 <Typography.Title>List My Gallery </Typography.Title>
                             </Col>
-                            {/* <Col>
-                                <Input value={name} onChange={(e) => setName(e.target.value)} />
-                            </Col>
                             <Col>
-                                &nbsp;&nbsp;<Button onClick={AddGallery}>Add</Button>
-                            </Col> */}
+                                <Button >Add</Button>
+                            </Col>
                         </Row>
                     }
 
@@ -53,7 +49,7 @@ export default () => {
             </Row >
             <Row justify={"center"}>
                 <Col span={16}>
-                    <ListGallery
+                    <List
                         data={gallerys}
                     />
                 </Col>

@@ -1,17 +1,18 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import Gallery from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
-import { Typography, Row, Col, Button, Divider } from 'antd';
+import { Typography, Row, Col, Button, Divider, Empty } from 'antd';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
-import { getGalleryByid, getImagesByGalleryID, publishGallery } from '../../api/gallery';
-import { Link } from 'react-router-dom';
+import { getGalleryByid, getImagesByGalleryID, publishGallery, deleteGallery } from '../../api/gallery';
+import { Link, useHistory } from 'react-router-dom';
 export default (props) => {
     const token = useSelector(state => state.authToken)
     const [currentImage, setCurrentImage] = useState(0);
     const [viewerIsOpen, setViewerIsOpen] = useState(false);
     const [gallery, setGallery] = useState({})
     const [images, setImages] = useState([])
+    const history = useHistory()
     const fetchGallery = () => {
         getGalleryByid(props.match.params.id)
             .then(res => {
@@ -60,6 +61,13 @@ export default (props) => {
             })
             .catch(err => console.log(err))
     }
+    const DeleteGallery = useCallback(() => {
+        deleteGallery(gallery.id, token)
+            .then(res => {
+                history.goBack()
+            })
+            .catch(err => console.log(err))
+    }, [gallery.id, token])
     useEffect(() => {
         fetchGallery()
     }, [])
@@ -80,12 +88,12 @@ export default (props) => {
                                     :
                                     <Typography.Text >&nbsp;Draft</Typography.Text>
                                 }
-
                             </Row>
                         </Col>
                         <Col >
                             <Button onClick={PublishGallery}>Publish</Button>&nbsp;
-                                <Link to={"/gallery/" + props.match.params.id + "/edit"}><Button>Edit</Button></Link>&nbsp;
+                            <Link to={"/gallery/" + props.match.params.id + "/edit"}><Button>Edit</Button></Link>&nbsp;
+                            <Button onClick={DeleteGallery}>Delete</Button>
                         </Col>
                     </Row>
                     <Divider />
@@ -94,7 +102,11 @@ export default (props) => {
 
             <Row justify='center'>
                 <Col span={20}>
-                    <Gallery photos={images} onClick={openLightbox} />
+                    {images.length === 0 ?
+                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        :
+                        <Gallery photos={images} onClick={openLightbox} />
+                    }
                 </Col>
             </Row>
             <ModalGateway>
@@ -116,50 +128,3 @@ export default (props) => {
         </>
     )
 }
-// const photos = [
-//     {
-//         src: "http://localhost:8080/upload/1/_X9QyTVRRAHXiWjM7LVR4Jzki7zY511YouJxEYO-HEc.jpg",
-//         width: 4,
-//         height: 3
-//     },
-//     {
-//         src: "http://localhost:8080/upload\\1\\Vfd8AjVODxh2j2-gGGJ1mW3WzS_TYIXc_thSUbtXJ94.jpg",
-//         width: 1,
-//         height: 1
-//     },
-//     {
-//         src: "https://source.unsplash.com/qDkso9nvCg0/600x799",
-//         width: 8,
-//         height: 6
-//     },
-//     {
-//         src: "https://source.unsplash.com/iecJiKe_RNg/600x799",
-//         width: 3,
-//         height: 4
-//     },
-//     {
-//         src: "https://source.unsplash.com/epcsn8Ed8kY/600x799",
-//         width: 3,
-//         height: 4
-//     },
-//     {
-//         src: "https://source.unsplash.com/NQSWvyVRIJk/800x599",
-//         width: 4,
-//         height: 3
-//     },
-//     {
-//         src: "https://source.unsplash.com/zh7GEuORbUw/600x799",
-//         width: 3,
-//         height: 4
-//     },
-//     {
-//         src: "https://source.unsplash.com/PpOHJezOalU/800x599",
-//         width: 4,
-//         height: 3
-//     },
-//     {
-//         src: "https://source.unsplash.com/I1ASdgphUH4/800x599",
-//         width: 4,
-//         height: 3
-//     }
-// ];

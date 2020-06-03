@@ -159,7 +159,6 @@ export default (props) => {
 
             <Row justify='center'>
                 <Col span={20}>
-
                     {checked ?
                         <Row>
                             <Gallery photos={images} renderImage={imageRenderer} />
