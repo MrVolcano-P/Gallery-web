@@ -18,8 +18,15 @@ export function addGallery(data, token) {
         }
     })
 }
-export function updateName(id,data,token) {
+export function updateName(id, data, token) {
     return axios.patch(`${host}/user/galleries/${id}/names`, data, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
+}
+export function publishGallery(id, data, token) {
+    return axios.patch(`${host}/user/galleries/${id}/publishes`, data, {
         headers: {
             Authorization: 'Bearer ' + token
         }

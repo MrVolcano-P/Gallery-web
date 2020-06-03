@@ -123,12 +123,18 @@ export default (props) => {
                 <Col span={16}>
                     <Row style={{}} justify='space-between' align="middle">
                         <Col>
-                            <div style={{ display: 'flex' }}>
-                                <Typography.Title editable={{ onChange: onChange }} level={3} type='secondary'>
+                            <Row>
+                                <Typography.Title editable={{ onChange: onChange }} level={3} >
                                     {name}
                                 </Typography.Title>
-                            </div>
-
+                            </Row>
+                            <Row>
+                                {gallery.is_publish ?
+                                    <Typography.Text >&nbsp;Published</Typography.Text>
+                                    :
+                                    <Typography.Text >&nbsp;Draft</Typography.Text>
+                                }
+                            </Row>
                         </Col>
                         <Col>
                             <Typography.Text>Mode </Typography.Text>
@@ -152,9 +158,15 @@ export default (props) => {
                 <Col span={20}>
 
                     {checked ?
-                        <Gallery photos={images} renderImage={imageRenderer} />
+                        <Row>
+                            <Gallery photos={images} renderImage={imageRenderer} />
+                        </Row>
+
                         :
-                        <Gallery photos={images} onClick={openLightbox} />
+                        <Row>
+                            <Gallery photos={images} onClick={openLightbox} />
+                        </Row>
+
                     }
                     <ModalGateway>
                         {viewerIsOpen ? (

@@ -4,7 +4,7 @@ import Carousel, { Modal, ModalGateway } from "react-images";
 import { Typography, Row, Col, Button, Divider } from 'antd';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
-import { getGalleryByid, getImagesByGalleryID } from '../../api/gallery';
+import { getGalleryByid, getImagesByGalleryID, publishGallery } from '../../api/gallery';
 import { Link } from 'react-router-dom';
 export default (props) => {
     const token = useSelector(state => state.authToken)
@@ -52,20 +52,38 @@ export default (props) => {
         setCurrentImage(0);
         setViewerIsOpen(false);
     };
+    const PublishGallery = () => {
+        publishGallery(gallery.id, { "is_publish": !gallery.is_publish }, token)
+            .then(res => {
+                console.log('set publish to ', !gallery.is_publish)
+                fetchGallery()
+            })
+            .catch(err => console.log(err))
+    }
     useEffect(() => {
         fetchGallery()
     }, [])
-    console.log(images)
+    console.log()
     return (
         <>
             <Row justify='center'>
                 <Col span={16}>
                     <Row style={{}} justify='space-between' align="middle">
                         <Col>
-                            <Typography.Title level={3}>&nbsp;{gallery.name}</Typography.Title>
+                            <Row>
+                                <Typography.Title level={3}>&nbsp;{gallery.name}</Typography.Title>
+                            </Row>
+                            <Row>
+                                {gallery.is_publish ?
+                                    <Typography.Text >&nbsp;Published</Typography.Text>
+                                    :
+                                    <Typography.Text >&nbsp;Draft</Typography.Text>
+                                }
+
+                            </Row>
                         </Col>
                         <Col >
-                            <Button>Publish</Button>&nbsp;
+                            <Button onClick={PublishGallery}>Publish</Button>&nbsp;
                                 <Link to={"/gallery/" + props.match.params.id + "/edit"}><Button>Edit</Button></Link>&nbsp;
                         </Col>
                     </Row>
