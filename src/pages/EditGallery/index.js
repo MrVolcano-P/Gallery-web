@@ -4,20 +4,24 @@ import Carousel, { Modal, ModalGateway } from "react-images";
 import { Typography, Row, Col, Button, Divider, Switch } from 'antd';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
-import { getGalleryByid, getImagesByGalleryID } from '../../api/gallery';
+import { getGalleryByid, getImagesByGalleryID, host } from '../../api/gallery';
 import { Link } from 'react-router-dom';
 import SelectedImage from './selectedImage';
 import ModalAddImage from './modalAddImage';
+import _ from 'lodash'
 export default (props) => {
     const token = useSelector(state => state.authToken)
     const [gallery, setGallery] = useState({})
     const [currentImage, setCurrentImage] = useState(0);
     const [viewerIsOpen, setViewerIsOpen] = useState(false);
     const [images, setImages] = useState([])
+    const [rawImage, setRawImage] = useState([])
     const [name, setName] = useState('')
     const [selectAll, setSelectAll] = useState(false);
     const [checked, setChecked] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
+    // const [deleteTemp, setDeleteTemp] = useState([])
+    var deleteTemp = []
     const fetchGallery = () => {
         getGalleryByid(props.match.params.id)
             .then(res => {
@@ -31,10 +35,11 @@ export default (props) => {
     const fetchImages = (id) => {
         getImagesByGalleryID(id)
             .then(res => {
+                setRawImage(res.data)
                 let temp = []
                 res.data.map(d => {
                     temp.push({
-                        src: "http://localhost:8080/" + d.filename,
+                        src: host + "/" + d.filename,
                         width: getRandomInt(4, 7),
                         height: getRandomInt(3, 6),
                     })
@@ -65,25 +70,59 @@ export default (props) => {
     const toggleSelectAll = () => {
         setSelectAll(!selectAll);
     };
+    const filterName = (inputName, duplicateName) => {
+        console.log("1=>", inputName)
+        console.log("2=>", duplicateName)
+        return inputName !== duplicateName
+    }
+    const mangeItem = (c, p) => {
+        // let temp = deleteTemp
+        // console.log("Original state", temp)
+        // console.log(c)
+        // console.log(p.src.slice(host.length + 1))
+        const parsedName = p.src.slice(host.length + 1)
+        // if (c) {
+        //     if (!temp.includes(parsedName)) {
+        //         temp.push(parsedName)
+        //         setDeleteTemp(temp)
+        //     }
+        // } else {
+        //     temp = temp.filter(t => filterName(t, parsedName))
+        //     setDeleteTemp([])
+        // }
+        // console.log("State to set", temp)
+        if (c) {
+            if (!deleteTemp.includes(parsedName)) {
+                deleteTemp.push(parsedName)
+            }
+        } else {
+
+        }
+    }
+
 
     const imageRenderer = useCallback(
         ({ index, left, top, key, photo }) => (
             <SelectedImage
                 selected={selectAll ? true : false}
                 key={key}
-                margin={"2px"}
+                margin={"1px"}
                 index={index}
                 photo={photo}
                 left={left}
                 top={top}
+                // deleteList={deleteTemp}
+                // setDeleteList={setDeleteTemp}
+                mangeItem={(c, p) => mangeItem(c, p)}
             />
         ),
         [selectAll]
     );
+    console.log(rawImage)
     useEffect(() => {
         fetchGallery()
     }, [])
-    console.log(name)
+    console.log('deleteTemp', deleteTemp)
     return (
         <>
             <Row justify='center'>
@@ -137,7 +176,12 @@ export default (props) => {
                             </Modal>
                         ) : null}
                     </ModalGateway>
-                    <ModalAddImage visible={modalVisible} setVisible={(v) => setModalVisible(v)} />
+                    <ModalAddImage
+                        visible={modalVisible}
+                        setVisible={(v) => setModalVisible(v)}
+                        galleryId={gallery.id}
+                        fetchImages={() => fetchImages(gallery.id)}
+                    />
                 </Col>
             </Row>
 

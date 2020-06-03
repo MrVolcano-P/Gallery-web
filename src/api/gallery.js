@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const host = "http://localhost:8080"
+export const host = "http://localhost:8080"
 export function listAllGalleries() {
     return axios.get(`${host}/galleries`)
 }
@@ -24,7 +24,7 @@ export function login(data) {
     return axios.post(`${host}/login`, data)
 }
 export function upload(id, formdata, token) {
-    return axios.post(`${host}/gallerys/${id}/images`, formdata, {
+    return axios.post(`${host}/user/galleries/${id}/images`, formdata, {
         headers: {
             Authorization: 'Bearer ' + token
         }

@@ -39,47 +39,64 @@ const cont = {
     position: "relative"
 };
 
-const SelectedImage = ({
-    index,
-    photo,
-    margin,
-    direction,
-    top,
-    left,
-    selected
-}) => {
-    const [isSelected, setIsSelected] = useState(selected);
+const SelectedImage = (props) => {
+    const [isSelected, setIsSelected] = useState(false);
     //calculate x,y scale
-    const sx = (100 - (30 / photo.width) * 100) / 100;
-    const sy = (100 - (30 / photo.height) * 100) / 100;
+    const sx = (100 - (30 / props.photo.width) * 100) / 100;
+    const sy = (100 - (30 / props.photo.height) * 100) / 100;
     selectedImgStyle.transform = `translateZ(0px) scale3d(${sx}, ${sy}, 1)`;
 
-    if (direction === "column") {
+    if (props.direction === "column") {
         cont.position = "absolute";
-        cont.left = left;
-        cont.top = top;
+        cont.left = props.left;
+        cont.top = props.top;
     }
 
     const handleOnClick = e => {
+        // e.preventDefault()
+        // props.mangeItem(!isSelected, props.photo)
+        // console.log("props.deleteList: ", props.deleteList);
+
+        // let temp = props.deleteList
+        // if (!isSelected) {
+        //     if (!temp.includes(props.photo.src)) {
+        //         temp.push(props.photo.src)
+        //     }
+
+        // } else {
+        //     // let temp = [...deleteArr]
+        //     temp = temp.filter(t => t !== props.photo.src)
+        //     // temp = temp.filter(t => {
+        //     //     if (t !== props.photo.src) {
+        //     //         console.log("t123");
+        //     //         return t
+        //     //     }
+        //     // })
+        //     console.log("yyyyyyyyyy", temp);
+
+        //     // setDeleteArr(temp)
+        // }
         setIsSelected(!isSelected);
+        props.mangeItem(!isSelected, props.photo)
+        // props.setDeleteList(temp)
     };
 
     useEffect(() => {
-        setIsSelected(selected);
-    }, [selected]);
-
+        setIsSelected(props.selected);
+    }, [props.selected]);
+    // console.log('deleteArr', props.)
     return (
         <div
-            style={{ margin, height: photo.height, width: photo.width, ...cont }}
+            style={{ margin: props.margin, height: props.photo.height, width: props.photo.width, ...cont }}
             className={!isSelected ? "not-selected" : ""}
         >
             <Checkmark selected={isSelected ? true : false} />
             <img
-                alt={photo.title}
+                alt={props.photo.title}
                 style={
                     isSelected ? { ...imgStyle, ...selectedImgStyle } : { ...imgStyle }
                 }
-                {...photo}
+                {...props.photo}
                 onClick={handleOnClick}
             />
             <style>{`.not-selected:hover{outline:2px solid #06befa}`}</style>
