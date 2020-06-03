@@ -1,6 +1,7 @@
 import axios from "axios"
 
 export const host = "http://localhost:8080"
+
 export function listAllGalleries() {
     return axios.get(`${host}/galleries`)
 }
@@ -18,13 +19,22 @@ export function addGallery(data, token) {
     })
 }
 export function deleteGallery(id) {
-    return axios.delete(`${host}/gallerys/${id}`)
+    return axios.delete(`${host}/user/galleries/${id}`)
 }
 export function login(data) {
     return axios.post(`${host}/login`, data)
 }
 export function upload(id, formdata, token) {
     return axios.post(`${host}/user/galleries/${id}/images`, formdata, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
+}
+
+export function deleteImages(id, data, token) {
+    console.log('tokenAPi', token)
+    return axios.delete(`${host}/user/galleries/${id}/images`, data, {
         headers: {
             Authorization: 'Bearer ' + token
         }

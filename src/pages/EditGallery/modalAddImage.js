@@ -37,6 +37,7 @@ export default function ModalAddImage(props) {
                 props.fetchImages()
                 props.setVisible(false)
             })
+            .catch(err => console.log(err))
     }
     return (
         <Modal

@@ -3,8 +3,8 @@ import Gallery from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
 import { Typography, Row, Col, Button, Divider, Switch } from 'antd';
 import Axios from 'axios';
-import { useSelector } from 'react-redux';
-import { getGalleryByid, getImagesByGalleryID, host } from '../../api/gallery';
+import { useSelector, useDispatch } from 'react-redux';
+import { getGalleryByid, getImagesByGalleryID, host, deleteImages } from '../../api/gallery';
 import { Link } from 'react-router-dom';
 import SelectedImage from './selectedImage';
 import ModalAddImage from './modalAddImage';
@@ -20,8 +20,8 @@ export default (props) => {
     const [selectAll, setSelectAll] = useState(false);
     const [checked, setChecked] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
-    // const [deleteTemp, setDeleteTemp] = useState([])
-    var deleteTemp = []
+    const [deleteTemp, setDeleteTemp] = useState([])
+    const dispatch = useDispatch()
     const fetchGallery = () => {
         getGalleryByid(props.match.params.id)
             .then(res => {
@@ -70,37 +70,16 @@ export default (props) => {
     const toggleSelectAll = () => {
         setSelectAll(!selectAll);
     };
-    const filterName = (inputName, duplicateName) => {
-        console.log("1=>", inputName)
-        console.log("2=>", duplicateName)
-        return inputName !== duplicateName
-    }
-    const mangeItem = (c, p) => {
-        // let temp = deleteTemp
-        // console.log("Original state", temp)
-        // console.log(c)
-        // console.log(p.src.slice(host.length + 1))
-        const parsedName = p.src.slice(host.length + 1)
-        // if (c) {
-        //     if (!temp.includes(parsedName)) {
-        //         temp.push(parsedName)
-        //         setDeleteTemp(temp)
-        //     }
-        // } else {
-        //     temp = temp.filter(t => filterName(t, parsedName))
-        //     setDeleteTemp([])
-        // }
-        // console.log("State to set", temp)
-        if (c) {
-            if (!deleteTemp.includes(parsedName)) {
-                deleteTemp.push(parsedName)
-            }
-        } else {
-
-        }
-    }
-
-
+    const AddTodel = useCallback((p) => {
+        let temp = deleteTemp
+        temp.push(p)
+        setDeleteTemp(temp)
+        console.log('add')
+    }, []);
+    const RemoveFromDel = useCallback((p) => {
+        console.log('remove')
+        _.remove(deleteTemp, d => d === p)
+    })
     const imageRenderer = useCallback(
         ({ index, left, top, key, photo }) => (
             <SelectedImage
@@ -111,18 +90,27 @@ export default (props) => {
                 photo={photo}
                 left={left}
                 top={top}
-                // deleteList={deleteTemp}
-                // setDeleteList={setDeleteTemp}
-                mangeItem={(c, p) => mangeItem(c, p)}
+                addTodel={(p) => AddTodel(p)}
+                removeFromdel={(p) => RemoveFromDel(p)}
             />
         ),
-        [selectAll]
+        []
     );
-    console.log(rawImage)
+    
+    const DeleteImages = () => {
+        console.log('showdel', deleteTemp)
+        // console.log(token)
+        deleteImages(gallery.id, { filenames: deleteTemp }, token)
+            .then((res) => {
+                console.log('success')
+                // props.fetchImages()
+                // props.setVisible(false)
+            })
+            .catch(err => console.log(err))
+    }
     useEffect(() => {
         fetchGallery()
     }, [])
-    console.log('deleteTemp', deleteTemp)
     return (
         <>
             <Row justify='center'>
@@ -142,7 +130,7 @@ export default (props) => {
 
                             {/* <Button onClick={toggleSelectAll}>toggle select all</Button> */}
                             {checked ?
-                                <Button>Delete</Button>
+                                <Button onClick={DeleteImages}>Delete</Button>
                                 :
                                 null
                             }

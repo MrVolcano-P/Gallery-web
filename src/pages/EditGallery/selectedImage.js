@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { host } from "../../api/gallery";
 
 const Checkmark = ({ selected }) => (
     <div
@@ -40,7 +41,7 @@ const cont = {
 };
 
 const SelectedImage = (props) => {
-    const [isSelected, setIsSelected] = useState(false);
+    const [isSelected, setIsSelected] = useState(props.selected);
     //calculate x,y scale
     const sx = (100 - (30 / props.photo.width) * 100) / 100;
     const sy = (100 - (30 / props.photo.height) * 100) / 100;
@@ -76,13 +77,20 @@ const SelectedImage = (props) => {
 
         //     // setDeleteArr(temp)
         // }
+        console.log(!isSelected)
         setIsSelected(!isSelected);
-        props.mangeItem(!isSelected, props.photo)
+        let len = host + "/upload/1/"
+        if (!isSelected) {
+            props.addTodel(props.photo.src.slice(len.length))
+        } else {
+            props.removeFromdel(props.photo.src.slice(len.length))
+        }
+        // props.mangeItem(!isSelected, props.photo)
         // props.setDeleteList(temp)
     };
 
     useEffect(() => {
-        setIsSelected(props.selected);
+        // setIsSelected(props.selected);
     }, [props.selected]);
     // console.log('deleteArr', props.)
     return (
