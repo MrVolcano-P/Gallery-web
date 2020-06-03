@@ -4,7 +4,7 @@ import Carousel, { Modal, ModalGateway } from "react-images";
 import { Typography, Row, Col, Button, Divider, Switch } from 'antd';
 import Axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { getGalleryByid, getImagesByGalleryID, host, deleteImages } from '../../api/gallery';
+import { getGalleryByid, getImagesByGalleryID, host, deleteImages, updateName } from '../../api/gallery';
 import { Link } from 'react-router-dom';
 import SelectedImage from './selectedImage';
 import ModalAddImage from './modalAddImage';
@@ -66,6 +66,12 @@ export default (props) => {
     const onChange = str => {
         console.log('Content change:', str);
         setName(str)
+        updateName(gallery.id, { Name: str }, token)
+            .then(res => {
+                console.log('Update name to', str)
+                setName(str)
+            })
+            .catch(err => console.log(err))
     };
     const toggleSelectAll = () => {
         setSelectAll(!selectAll);
@@ -96,7 +102,7 @@ export default (props) => {
         ),
         []
     );
-    
+
     const DeleteImages = () => {
         console.log('showdel', deleteTemp)
         // console.log(token)
