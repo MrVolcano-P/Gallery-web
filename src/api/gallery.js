@@ -9,7 +9,7 @@ export function getGalleryByid(id) {
     return axios.get(`${host}/galleries/${id}`)
 }
 export function getGalleryByidAndCheckAuth(id, token) {
-    return axios.get(`${host}/user/galleries/${id}`,{
+    return axios.get(`${host}/user/galleries/${id}`, {
         headers: {
             Authorization: 'Bearer ' + token
         }
@@ -88,5 +88,13 @@ export function deleteImages(id, data, token) {
             Authorization: `Bearer ${token}`
         },
         data
+    })
+}
+export function deleteImage(id, filename, token) {
+    console.log('tokenAPi', token)
+    return axios.delete(`${host}/user/galleries/${id}/images/${filename}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
 }

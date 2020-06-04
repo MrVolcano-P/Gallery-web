@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { getGalleryByid, getImagesByGalleryID, publishGallery, deleteGallery, getGalleryByidAndCheckAuth } from '../../api/gallery';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import ResponsiveGallery from 'react-responsive-gallery';
 const TextHead = styled.h3`
     color: white;
     text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
@@ -52,8 +53,6 @@ export default (props) => {
                 res.data.map(d => {
                     temp.push({
                         src: "http://localhost:8080/" + d.filename,
-                        width: 4,
-                        height: 3,
                     })
                 })
                 console.log(temp)
@@ -124,7 +123,7 @@ export default (props) => {
                                 null
                                 :
                                 <>
-                                <Button onClick={PublishGallery}>Publish</Button>&nbsp;
+                                    <Button onClick={PublishGallery}>Publish</Button>&nbsp;
                                 <Link to={"/gallery/" + props.match.params.id + "/edit"}><Button>Edit</Button></Link>&nbsp;
                                 <Button onClick={DeleteGallery}>Delete</Button>
                                 </>
@@ -141,7 +140,8 @@ export default (props) => {
                     {images.length === 0 ?
                         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                         :
-                        <Gallery photos={images} onClick={openLightbox} />
+                        // <Gallery photos={images} onClick={openLightbox} />
+                        <ResponsiveGallery images={images} useLightBox={true}/>
                     }
                 </Col>
             </Row>

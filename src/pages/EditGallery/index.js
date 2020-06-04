@@ -6,10 +6,10 @@ import Axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { getGalleryByid, getImagesByGalleryID, host, deleteImages, updateName, getGalleryByidAndCheckAuth } from '../../api/gallery';
 import { Link, useHistory } from 'react-router-dom';
-import SelectedImage from './selectedImage';
 import ModalAddImage from './modalAddImage';
 import _ from 'lodash'
 import styled from 'styled-components';
+import ImageShow from '../../components/ImageShow'
 const TextHead = styled.h3`
     color: white;
     text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
@@ -27,6 +27,7 @@ export default (props) => {
     const [checked, setChecked] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
     const [deleteTemp, setDeleteTemp] = useState([])
+
     const dispatch = useDispatch()
     const history = useHistory()
     const fetchGallery = () => {
@@ -56,7 +57,7 @@ export default (props) => {
                 history.push('/')
             })
     }
-    const fetchImages = (id) => {
+    const fetchImages = useCallback((id) => {
         getImagesByGalleryID(id)
             .then(res => {
                 setRawImage(res.data)
@@ -67,7 +68,7 @@ export default (props) => {
                     console.log("w: ", w);
                     let object = {
                         src: host + "/" + d.filename,
-                        width: 4,
+                        maxWidth: 4,
                         height: 3,
                     }
                     temp.push(object)
@@ -76,17 +77,8 @@ export default (props) => {
                 setImages(temp)
             })
             .catch(err => console.log(err))
-    }
+    }, [])
 
-    const openLightbox = useCallback((event, { photo, index }) => {
-        setCurrentImage(index);
-        setViewerIsOpen(true);
-    }, []);
-
-    const closeLightbox = () => {
-        setCurrentImage(0);
-        setViewerIsOpen(false);
-    };
     const onChange = str => {
         console.log('Content change:', str);
         setName(str)
@@ -97,43 +89,14 @@ export default (props) => {
             })
             .catch(err => console.log(err))
     };
-    const toggleSelectAll = () => {
-        setSelectAll(!selectAll);
-    };
-    const AddTodel = useCallback((p) => {
-        let temp = deleteTemp
-        temp.push(p)
-        setDeleteTemp(temp)
-        console.log('add')
-    }, []);
-    const RemoveFromDel = useCallback((p) => {
-        console.log('remove')
-        _.remove(deleteTemp, d => d === p)
-    })
-    const imageRenderer = useCallback(
-        ({ index, left, top, key, photo }) => (
-            <SelectedImage
-                selected={selectAll ? true : false}
-                key={key}
-                margin={"1px"}
-                index={index}
-                photo={photo}
-                left={left}
-                top={top}
-                addTodel={(p) => AddTodel(p)}
-                removeFromdel={(p) => RemoveFromDel(p)}
-            />
-        ),
-        []
-    );
-
+    
     const DeleteImages = () => {
         console.log('showdel', deleteTemp)
         // console.log(token)
         deleteImages(gallery.id, { filenames: deleteTemp }, token)
             .then((res) => {
                 console.log('success')
-                fetchGallery()
+                fetchImages(gallery.id)
                 // props.fetchImages()
                 // props.setVisible(false)
             })
@@ -162,17 +125,17 @@ export default (props) => {
                                 }
                             </Row> */}
                         </Col>
-                        <Col>
+                        {/* <Col>
                             <Typography.Text>Mode </Typography.Text>
                             <Switch checkedChildren="Delete" unCheckedChildren="View" onChange={(checked) => setChecked(checked)} />&nbsp;
 
-                            {/* <Button onClick={toggleSelectAll}>toggle select all</Button> */}
+                            
                             {checked ?
                                 <Button onClick={DeleteImages}>Delete</Button>
                                 :
                                 null
                             }
-                        </Col>
+                        </Col> */}
                         <Col >
                             <Button onClick={() => setModalVisible(true)}>Add Images</Button>&nbsp;
                             <Link to={"/gallery/" + props.match.params.id}><Button>Done</Button></Link>&nbsp;
@@ -181,34 +144,12 @@ export default (props) => {
                     <Divider />
                 </Col>
             </Row>
-
             <Row justify='center'>
                 <Col span={20}>
-                    {checked ?
-                        <Row>
-                            <Gallery photos={images} renderImage={imageRenderer} />
-                        </Row>
-
-                        :
-                        <Row>
-                            <Gallery photos={images} onClick={openLightbox} />
-                        </Row>
-
-                    }
-                    <ModalGateway>
-                        {viewerIsOpen ? (
-                            <Modal onClose={closeLightbox}>
-                                <Carousel
-                                    currentIndex={currentImage}
-                                    views={images.map(x => ({
-                                        ...x,
-                                        srcset: x.srcSet,
-                                        caption: x.title
-                                    }))}
-                                />
-                            </Modal>
-                        ) : null}
-                    </ModalGateway>
+                    <ImageShow images={images}
+                        galleryId={gallery.id}
+                        fetchImages={() => fetchImages(gallery.id)}
+                    />
                     <ModalAddImage
                         visible={modalVisible}
                         setVisible={(v) => setModalVisible(v)}
