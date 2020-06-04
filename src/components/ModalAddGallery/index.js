@@ -11,19 +11,16 @@ export default (props) => {
     const [antImages, setAntImages] = useState([]);
     const history = useHistory()
     const AddGallery = () => {
-        // console.log(antImages[0])
         console.log(name)
-        // if (name === '' || antImages.length < 6) {
-        //     console.log('picture < 6')
-        // } else {
-        addGallery({ Name: name }, token)
-            .then(res => {
-                console.log(res.data)
-                // history.push('/gallery/' + res.data.id)
-                uploadImage(res.data.id)
-            })
-            .catch(err => console.log(err))
-        // }
+        if (name !== '') {
+            addGallery({ Name: name }, token)
+                .then(res => {
+                    console.log(res.data)
+                    // history.push('/gallery/' + res.data.id)
+                    uploadImage(res.data.id)
+                })
+                .catch(err => console.log(err))
+        }
     }
 
     const propsDrag = {
@@ -68,7 +65,13 @@ export default (props) => {
             <>
                 <Row>
                     <Typography.Text>Name</Typography.Text>
+                    <br />
                     <Input onChange={(e) => setName(e.target.value)} />
+                    {name === '' ?
+                        <Typography.Text>Please type the name of gallery</Typography.Text>
+                        :
+                        null
+                    }
                 </Row>
                 <br></br>
                 <Upload.Dragger {...propsDrag}>

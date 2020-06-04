@@ -6,6 +6,12 @@ import Axios from 'axios';
 import { useSelector } from 'react-redux';
 import { getGalleryByid, getImagesByGalleryID, publishGallery, deleteGallery, getGalleryByidAndCheckAuth } from '../../api/gallery';
 import { Link, useHistory } from 'react-router-dom';
+import styled from 'styled-components';
+const TextHead = styled.h3`
+    color: white;
+    text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+    
+`
 export default (props) => {
     const token = useSelector(state => state.authToken)
     const profile = useSelector(state => state.profile)
@@ -103,22 +109,22 @@ export default (props) => {
                     <Row style={{}} justify='space-between' align="middle">
                         <Col>
                             <Row>
-                                <Typography.Title level={3}>&nbsp;{gallery.name}</Typography.Title>
+                                <TextHead>&nbsp;{gallery.name}</TextHead>
                             </Row>
-                            <Row>
+                            {/* <Row>
                                 {gallery.is_publish ?
                                     <Typography.Text >&nbsp;Published</Typography.Text>
                                     :
                                     <Typography.Text >&nbsp;Draft</Typography.Text>
                                 }
-                            </Row>
+                            </Row> */}
                         </Col>
                         <Col >
                             {CheckAuth() ?
                                 null
                                 :
                                 <>
-                                    <Button onClick={PublishGallery}>Publish</Button> & nbsp;
+                                <Button onClick={PublishGallery}>Publish</Button>&nbsp;
                                 <Link to={"/gallery/" + props.match.params.id + "/edit"}><Button>Edit</Button></Link>&nbsp;
                                 <Button onClick={DeleteGallery}>Delete</Button>
                                 </>

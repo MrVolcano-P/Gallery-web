@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu, Button, Dropdown } from 'antd';
+import { Layout, Menu, Button, Dropdown, Row, Col } from 'antd';
 import { Typography } from 'antd';
 import { Link, NavLink, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,11 +7,9 @@ import { AppstoreOutlined, MailOutlined, SettingOutlined, CaretDownOutlined, Log
 import { setAuthToken } from "../action/authToken";
 import { logout } from "../api/gallery";
 import { setProfile } from "../action/profile";
-
-const { SubMenu } = Menu;
-const { Title } = Typography;
-const { Header, Content, Footer } = Layout;
-
+import ModalAddGallery from '../components/ModalAddGallery'
+import { faBuilding, faUserTie, faFileAlt, faTable, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default () => {
     const dispatch = useDispatch()
@@ -26,40 +24,40 @@ export default () => {
                 dispatch(setProfile(null))
                 history.push("/")
             })
-
     }
     const menu = (
         <Menu>
             <Menu.Item>
                 <a onClick={logOut}>
-                    LogOut &nbsp; <LogoutOutlined style={{ fontSize: '18px', color: '#08c' }} />
+                    LogOut &nbsp;
                 </a>
             </Menu.Item>
         </Menu >
     );
     return (
-        <Layout>
-            <Header>
+        <Row justify='space-between' align='middle' style={{ backgroundColor: '#1b1b1b' }}>
+            <Col style={{ marginLeft: 20 }}>
                 <Link to="/" >
-                    <Title style={{ float: 'left', color: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Gallery</Title>
+                    <Typography.Title style={{ float: 'left', color: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Gallery</Typography.Title>
                 </Link>
-                <div style={{ float: 'right' }}>
-                    {token === null ?
-                        <Link to="/login" >
-                            <Button>Login</Button>
-                        </Link>
-                        :
-                        <>
-                            <Link to="/gallery/owner/all" ><Button>My Gallery</Button></Link>
-                            <Dropdown overlay={menu} placement="bottomLeft">
-                                <Button>{profile?.name}<CaretDownOutlined style={{ fontSize: '24px', color: '#08c' }} /></Button>
-                            </Dropdown>
-                        </>
-                    }
-
-                </div>
-            </Header>
-        </Layout>
+            </Col>
+            <Col style={{ marginRight: 20 }}>
+                {token === null ?
+                    <Link to="/login" >
+                        <Button>Login</Button>
+                    </Link>
+                    :
+                    <>
+                        <Link to="/gallery/owner/all" >
+                            <Button><Typography.Text strong>My Gallery</Typography.Text></Button>
+                        </Link>&nbsp;
+                        <Dropdown overlay={menu} placement="bottomLeft">
+                            <Button><Typography.Text strong style={{ color: 'red' }}>{profile?.name}&nbsp;<FontAwesomeIcon icon={faCaretDown} /></Typography.Text></Button>
+                        </Dropdown>&nbsp;
+                    </>
+                }
+            </Col>
+        </Row>
     )
 }
 

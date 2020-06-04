@@ -7,12 +7,17 @@ import List from '../../components/List'
 import ModalAddGallery from '../../components/ModalAddGallery'
 import { listAllGalleries, addGallery, deleteGallery } from '../../api/gallery'
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
+const TextHead = styled.h3`
+    color: white;
+    text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+    
+`
 export default () => {
     const token = useSelector(state => state.authToken)
     const profile = useSelector(state => state.profile)
     const [modalVisible, setModalVisible] = useState(false)
     console.log('token', token)
-    const [name, setName] = useState('')
     const [gallerys, setGallerys] = useState([])
     const fetchGallerys = () => {
         listAllGalleries()
@@ -22,9 +27,6 @@ export default () => {
             })
             .catch(err => console.log(err))
     }
-    const AddGallery = useCallback(() => {
-        addGallery({ Name: name }, token).then(() => fetchGallerys())
-    }, [name])
 
     useEffect(() => {
         fetchGallerys()
@@ -32,11 +34,12 @@ export default () => {
     console.log(profile)
     return (
         <>
-            <Row justify={"center"}>
+            <Row justify={"center"} style={{marginTop:10,marginBottom:5}}>
                 <Col span={14}>
                     <Row justify='space-between' align="middle">
                         <Col>
-                            <Typography.Title level={2}>List All Gallery </Typography.Title>
+                            {/* <Typography.Title level={2}>List All Gallery </Typography.Title> */}
+                            <TextHead>List All Gallery</TextHead>
                         </Col>
                         <Col>
                             {token === null ?
@@ -60,8 +63,6 @@ export default () => {
             <ModalAddGallery
                 visible={modalVisible}
                 setVisible={setModalVisible}
-            // galleryId={gallery.id}
-            // fetchImages={() => fetchImages(gallery.id)} 
             />
         </>
     )
