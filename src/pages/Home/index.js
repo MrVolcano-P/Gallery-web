@@ -25,7 +25,7 @@ export default () => {
     const AddGallery = useCallback(() => {
         addGallery({ Name: name }, token).then(() => fetchGallerys())
     }, [name])
-    
+
     useEffect(() => {
         fetchGallerys()
     }, [])
@@ -53,7 +53,7 @@ export default () => {
                 <Col span={16}>
                     <List
                         data={gallerys}
-                        // delete={DeleteGallery}
+                    // delete={DeleteGallery}
                     />
                 </Col>
             </Row>

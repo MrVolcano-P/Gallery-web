@@ -8,6 +8,13 @@ export function listAllGalleries() {
 export function getGalleryByid(id) {
     return axios.get(`${host}/galleries/${id}`)
 }
+export function getGalleryByidAndCheckAuth(id, token) {
+    return axios.get(`${host}/user/galleries/${id}`,{
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
+}
 export function getGalleryByToken(token) {
     return axios.get(`${host}/user/galleries`, {
         headers: {
@@ -46,14 +53,17 @@ export function deleteGallery(id, token) {
         }
     })
 }
+export function signup(data) {
+    return axios.post(`${host}/signup`, data)
+}
 export function login(data) {
     return axios.post(`${host}/login`, data)
 }
 export function logout(token) {
     console.log('tokenAPi', token)
-    return axios.post(`${host}/logout`, {
+    return axios.post(`${host}/logout`, {}, {
         headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: `Bearer ${token}`
         }
     })
 }
@@ -73,9 +83,10 @@ export function getProfile(token) {
 }
 export function deleteImages(id, data, token) {
     console.log('tokenAPi', token)
-    return axios.delete(`${host}/user/galleries/${id}/images`, data, {
+    return axios.delete(`${host}/user/galleries/${id}/images`, {
         headers: {
-            Authorization: 'Bearer ' + token
-        }
+            Authorization: `Bearer ${token}`
+        },
+        data
     })
 }

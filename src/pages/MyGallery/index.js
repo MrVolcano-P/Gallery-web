@@ -5,10 +5,12 @@ import ReactList from 'react-list';
 import { ListGroup } from 'react-bootstrap'
 import List from '../../components/List'
 import { listAllGalleries, addGallery, deleteGallery, getGalleryByToken } from '../../api/gallery'
+import ModalAddGallery from '../../components/ModalAddGallery'
 import { useSelector } from 'react-redux';
 export default () => {
     const token = useSelector(state => state.authToken)
     const profile = useSelector(state => state.profile)
+    const [modalVisible, setModalVisible] = useState(false)
     console.log('token', token)
     const [name, setName] = useState('')
     const [gallerys, setGallerys] = useState([])
@@ -20,9 +22,6 @@ export default () => {
             })
             .catch(err => console.log(err))
     }
-    const AddGallery = useCallback(() => {
-        addGallery({ Name: name }, token).then(() => fetchGallerys())
-    }, [name])
     useEffect(() => {
         fetchGallerys()
     }, [])
@@ -37,10 +36,10 @@ export default () => {
                         :
                         <Row justify='space-between' align='middle'>
                             <Col>
-                                <Typography.Title>List My Gallery </Typography.Title>
+                                <Typography.Title level={2}>List My Gallery </Typography.Title>
                             </Col>
                             <Col>
-                                <Button >Add</Button>
+                                <Button onClick={() => setModalVisible(true)}>Add</Button>
                             </Col>
                         </Row>
                     }
@@ -54,7 +53,12 @@ export default () => {
                     />
                 </Col>
             </Row>
-
+            <ModalAddGallery
+                visible={modalVisible}
+                setVisible={setModalVisible}
+            // galleryId={gallery.id}
+            // fetchImages={() => fetchImages(gallery.id)} 
+            />
         </>
     )
 }

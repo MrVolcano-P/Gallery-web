@@ -4,8 +4,8 @@ import Carousel, { Modal, ModalGateway } from "react-images";
 import { Typography, Row, Col, Button, Divider, Switch } from 'antd';
 import Axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { getGalleryByid, getImagesByGalleryID, host, deleteImages, updateName } from '../../api/gallery';
-import { Link } from 'react-router-dom';
+import { getGalleryByid, getImagesByGalleryID, host, deleteImages, updateName, getGalleryByidAndCheckAuth } from '../../api/gallery';
+import { Link, useHistory } from 'react-router-dom';
 import SelectedImage from './selectedImage';
 import ModalAddImage from './modalAddImage';
 import _ from 'lodash'
@@ -22,15 +22,33 @@ export default (props) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [deleteTemp, setDeleteTemp] = useState([])
     const dispatch = useDispatch()
+    const history = useHistory()
     const fetchGallery = () => {
         getGalleryByid(props.match.params.id)
             .then(res => {
-                // console.log(res)
+                console.log(res.data)
                 setGallery(res.data)
                 setName(res.data.name)
                 fetchImages(res.data.id)
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err.data)
+                console.log('error')
+                fetchGalleryAndCheckAuth()
+            })
+    }
+    const fetchGalleryAndCheckAuth = () => {
+        getGalleryByidAndCheckAuth(props.match.params.id, token)
+            .then(res => {
+                setGallery(res.data)
+                setName(res.data.name)
+                fetchImages(res.data.id)
+            })
+            .catch(err => {
+                console.log(err)
+                console.log('error in auth')
+                history.push('/')
+            })
     }
     const fetchImages = (id) => {
         getImagesByGalleryID(id)
@@ -38,22 +56,22 @@ export default (props) => {
                 setRawImage(res.data)
                 let temp = []
                 res.data.map(d => {
-                    temp.push({
+                    let w = Math.floor(Math.random() * 7) + 4
+                    let h = Math.floor(Math.random() * 6) + 3
+                    console.log("w: ", w);
+                    let object = {
                         src: host + "/" + d.filename,
-                        width: getRandomInt(4, 7),
-                        height: getRandomInt(3, 6),
-                    })
+                        width: 4,
+                        height: 3,
+                    }
+                    temp.push(object)
                 })
-                console.log(temp)
+                console.log('test: ', temp)
                 setImages(temp)
             })
             .catch(err => console.log(err))
     }
-    function getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-    }
+
     const openLightbox = useCallback((event, { photo, index }) => {
         setCurrentImage(index);
         setViewerIsOpen(true);
@@ -109,6 +127,7 @@ export default (props) => {
         deleteImages(gallery.id, { filenames: deleteTemp }, token)
             .then((res) => {
                 console.log('success')
+                fetchGallery()
                 // props.fetchImages()
                 // props.setVisible(false)
             })

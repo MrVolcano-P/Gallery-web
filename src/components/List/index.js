@@ -9,7 +9,7 @@ export default (props) => {
         <List
             itemLayout="vertical"
             size="large"
-            pagination={{
+            pagination={props.data.length < 6 ? null : {
                 onChange: page => {
                     console.log(page);
                 },
@@ -17,7 +17,7 @@ export default (props) => {
             }}
             dataSource={props.data}
             renderItem={item => (
-                <Row justify='start'>
+                <Row justify='start' style={{ marginTop: 10, marginBottom: 10, borderColor: 'black', borderWidth: 1 }}>
                     <Col span={20}>
                         <Row>
                             <Typography.Title level={3}>

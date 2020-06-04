@@ -3,8 +3,11 @@ import styled from 'styled-components'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import styles from './style'
-import { login } from '../../api/gallery';
+import { login, signup, getProfile } from '../../api/gallery';
 import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setAuthToken } from '../../action/authToken'
+import { setProfile } from '../../action/profile'
 const Button = styled.button`
   background-color: #942A96 !important;
   color: #fff !important;
@@ -37,6 +40,16 @@ const RegisterSchema = Yup.object().shape({
 
 export default () => {
     const history = useHistory();
+    const dispatch = useDispatch()
+    const SetProfile = (token) => {
+        getProfile(token)
+            .then(res => {
+                console.log(res.data)
+                dispatch(setProfile(res.data))
+                history.push("/")
+            })
+            .catch(err => console.log(err))
+    }
     return (
         <div>
             <div className="row justify-content-center" style={styles.row}>
@@ -57,6 +70,16 @@ export default () => {
                                 onSubmit={values => {
                                     // same shape as initial values
                                     console.log(values);
+                                    signup(values).then(res => {
+                                        login({ Email: values.email, Password: values.password })
+                                            .then(res => {
+                                                console.log(res.data)
+                                                dispatch(setAuthToken(res.data.token))
+                                                SetProfile(res.data.token)
+
+                                            })
+                                            .catch(err => console.log(err))
+                                    }).catch(err => console.log(err))
                                 }}
                             >
                                 {({ errors, touched }) => (

@@ -8,14 +8,15 @@ import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import EditGallery from '../pages/EditGallery';
 import MyGallery from '../pages/MyGallery';
+import PrivateRoute from './privateRoute';
 export default () => (
     <BrowserRouter>
         <Route path="/" component={nav} />
         <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/gallery/:id" component={Gallery} />
-            <Route exact path="/gallery/:id/edit" component={EditGallery} />
-            <Route exact path="/gallery/owner/all" component={MyGallery} />
+            <PrivateRoute exact path="/gallery/:id/edit" component={EditGallery} />
+            <PrivateRoute exact path="/gallery/owner/all" component={MyGallery} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
         </Switch>

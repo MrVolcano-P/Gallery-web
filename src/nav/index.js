@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Layout, Menu, Button, Dropdown } from 'antd';
 import { Typography } from 'antd';
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { AppstoreOutlined, MailOutlined, SettingOutlined, CaretDownOutlined, LogoutOutlined } from '@ant-design/icons';
 import { setAuthToken } from "../action/authToken";
@@ -17,13 +17,16 @@ export default () => {
     const dispatch = useDispatch()
     const token = useSelector(state => state.authToken)
     const profile = useSelector(state => state.profile)
-    const logOut = () => {
-        console.log('logout')
+    const history = useHistory()
+    const logOut = async () => {
+        console.log('logout: ', token)
         logout(token)
             .then(res => {
                 dispatch(setAuthToken(null))
                 dispatch(setProfile(null))
+                history.push("/")
             })
+
     }
     const menu = (
         <Menu>
@@ -49,7 +52,7 @@ export default () => {
                         <>
                             <Link to="/gallery/owner/all" ><Button>My Gallery</Button></Link>
                             <Dropdown overlay={menu} placement="bottomLeft">
-                                <Button>{profile.name}<CaretDownOutlined style={{ fontSize: '24px', color: '#08c' }} /></Button>
+                                <Button>{profile?.name}<CaretDownOutlined style={{ fontSize: '24px', color: '#08c' }} /></Button>
                             </Dropdown>
                         </>
                     }

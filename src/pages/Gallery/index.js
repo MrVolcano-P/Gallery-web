@@ -4,10 +4,11 @@ import Carousel, { Modal, ModalGateway } from "react-images";
 import { Typography, Row, Col, Button, Divider, Empty } from 'antd';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
-import { getGalleryByid, getImagesByGalleryID, publishGallery, deleteGallery } from '../../api/gallery';
+import { getGalleryByid, getImagesByGalleryID, publishGallery, deleteGallery, getGalleryByidAndCheckAuth } from '../../api/gallery';
 import { Link, useHistory } from 'react-router-dom';
 export default (props) => {
     const token = useSelector(state => state.authToken)
+    const profile = useSelector(state => state.profile)
     const [currentImage, setCurrentImage] = useState(0);
     const [viewerIsOpen, setViewerIsOpen] = useState(false);
     const [gallery, setGallery] = useState({})
@@ -16,11 +17,26 @@ export default (props) => {
     const fetchGallery = () => {
         getGalleryByid(props.match.params.id)
             .then(res => {
-                console.log(res)
+                console.log(res.data)
                 setGallery(res.data)
                 fetchImages(res.data.id)
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log('error')
+                fetchGalleryAndCheckAuth()
+            })
+    }
+    const fetchGalleryAndCheckAuth = () => {
+        getGalleryByidAndCheckAuth(props.match.params.id, token)
+            .then(res => {
+                setGallery(res.data)
+                fetchImages(res.data.id)
+            })
+            .catch(err => {
+                console.log(err)
+                console.log('error in auth')
+                history.push('/')
+            })
     }
     const fetchImages = (id) => {
         getImagesByGalleryID(id)
@@ -30,19 +46,14 @@ export default (props) => {
                 res.data.map(d => {
                     temp.push({
                         src: "http://localhost:8080/" + d.filename,
-                        width: getRandomInt(4, 7),
-                        height: getRandomInt(3, 6),
+                        width: 4,
+                        height: 3,
                     })
                 })
                 console.log(temp)
                 setImages(temp)
             })
             .catch(err => console.log(err))
-    }
-    function getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
     }
     const openLightbox = useCallback((event, { photo, index }) => {
         setCurrentImage(index);
@@ -68,6 +79,18 @@ export default (props) => {
             })
             .catch(err => console.log(err))
     }, [gallery.id, token])
+    const CheckAuth = () => {
+        if (token === null) {
+            return true
+        } else {
+            if (gallery?.owner?.id === profile?.id) {
+                return false
+            } else {
+                return true
+            }
+        }
+    }
+    console.log(CheckAuth())
     useEffect(() => {
         fetchGallery()
     }, [])
@@ -91,9 +114,16 @@ export default (props) => {
                             </Row>
                         </Col>
                         <Col >
-                            <Button onClick={PublishGallery}>Publish</Button>&nbsp;
-                            <Link to={"/gallery/" + props.match.params.id + "/edit"}><Button>Edit</Button></Link>&nbsp;
-                            <Button onClick={DeleteGallery}>Delete</Button>
+                            {CheckAuth() ?
+                                null
+                                :
+                                <>
+                                    <Button onClick={PublishGallery}>Publish</Button> & nbsp;
+                                <Link to={"/gallery/" + props.match.params.id + "/edit"}><Button>Edit</Button></Link>&nbsp;
+                                <Button onClick={DeleteGallery}>Delete</Button>
+                                </>
+                            }
+
                         </Col>
                     </Row>
                     <Divider />

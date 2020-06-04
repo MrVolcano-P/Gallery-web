@@ -54,29 +54,6 @@ const SelectedImage = (props) => {
     }
 
     const handleOnClick = e => {
-        // e.preventDefault()
-        // props.mangeItem(!isSelected, props.photo)
-        // console.log("props.deleteList: ", props.deleteList);
-
-        // let temp = props.deleteList
-        // if (!isSelected) {
-        //     if (!temp.includes(props.photo.src)) {
-        //         temp.push(props.photo.src)
-        //     }
-
-        // } else {
-        //     // let temp = [...deleteArr]
-        //     temp = temp.filter(t => t !== props.photo.src)
-        //     // temp = temp.filter(t => {
-        //     //     if (t !== props.photo.src) {
-        //     //         console.log("t123");
-        //     //         return t
-        //     //     }
-        //     // })
-        //     console.log("yyyyyyyyyy", temp);
-
-        //     // setDeleteArr(temp)
-        // }
         console.log(!isSelected)
         setIsSelected(!isSelected);
         let len = host + "/upload/1/"
@@ -85,14 +62,11 @@ const SelectedImage = (props) => {
         } else {
             props.removeFromdel(props.photo.src.slice(len.length))
         }
-        // props.mangeItem(!isSelected, props.photo)
-        // props.setDeleteList(temp)
     };
 
     useEffect(() => {
-        // setIsSelected(props.selected);
+        setIsSelected(props.selected);
     }, [props.selected]);
-    // console.log('deleteArr', props.)
     return (
         <div
             style={{ margin: props.margin, height: props.photo.height, width: props.photo.width, ...cont }}
