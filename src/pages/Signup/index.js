@@ -18,15 +18,15 @@ import {
 } from "formik-antd"
 import { message, Button, Row, Col, Typography } from "antd"
 import { Success } from '../../components/Message'
-// const Button = styled.button`
-//   background-color: #942A96 !important;
-//   color: #fff !important;
-//   font-family: Roboto;
-//   font-weight: 700;
-//   &&:hover{
-//     background-color: #872589 !important;
-//   }
-// `
+const ButtonClick = styled(SubmitButton)`
+    background-color: #942A96 !important;
+    color: #fff !important;
+    font-family: Roboto;
+    font-weight: 700;
+    &&:hover{
+        background-color: #872589 !important;
+    }
+`
 
 const RegisterSchema = Yup.object().shape({
     name: Yup.string()
@@ -130,7 +130,7 @@ export default () => {
                                     <Col offset={8}>
                                         <Button.Group>
                                             <ResetButton>Reset</ResetButton>&nbsp;
-                                            <SubmitButton>Signup</SubmitButton>
+                                            <ButtonClick>Signup</ButtonClick>
                                         </Button.Group>
                                     </Col>
                                     <Col offset={6}>

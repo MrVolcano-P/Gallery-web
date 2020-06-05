@@ -52,7 +52,7 @@ export default (props) => {
                 console.log('success')
                 // props.fetchImages()
                 // props.setVisible(false)
-                history.push('/gallery/' + id)
+                history.push({pathname:'/gallery',state:{galId:id}})
                 Success('Created New Gallery')
             })
             .catch(err => console.log(err))

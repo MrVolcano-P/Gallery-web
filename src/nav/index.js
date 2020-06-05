@@ -11,6 +11,7 @@ import ModalAddGallery from '../components/ModalAddGallery'
 import { faBuilding, faUserTie, faFileAlt, faTable, faCaretDown, faSignOutAlt, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
+import { Success } from "../components/Message";
 const MenuButton = styled(Button)`
     color:#fff;
     background-color: #1b1b1b;
@@ -64,6 +65,7 @@ export default () => {
                 dispatch(setAuthToken(null))
                 dispatch(setProfile(null))
                 history.push("/")
+                Success('GoodBye')
             })
     }
     const menu = (
