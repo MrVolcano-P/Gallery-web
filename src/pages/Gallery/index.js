@@ -1,13 +1,13 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import Gallery from "react-photo-gallery";
-import Carousel, { Modal, ModalGateway } from "react-images";
-import { Typography, Row, Col, Button, Divider, Empty } from 'antd';
+import React, { useState, useEffect } from 'react'
+import { Row, Col, Divider, Empty } from 'antd';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
-import { getGalleryByid, getImagesByGalleryID, publishGallery, deleteGallery, getGalleryByidAndCheckAuth } from '../../api/gallery';
+import { getGalleryByid, getImagesByGalleryID, getGalleryByidAndCheckAuth, host, publishGallery } from '../../api/gallery';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import ResponsiveGallery from 'react-responsive-gallery';
+import { faArrowLeft, faEdit, faShieldAlt, faGlobe } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const TextHead = styled.h3`
     color: white;
     text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
@@ -16,8 +16,6 @@ const TextHead = styled.h3`
 export default (props) => {
     const token = useSelector(state => state.authToken)
     const profile = useSelector(state => state.profile)
-    const [currentImage, setCurrentImage] = useState(0);
-    const [viewerIsOpen, setViewerIsOpen] = useState(false);
     const [gallery, setGallery] = useState({})
     const [images, setImages] = useState([])
     const history = useHistory()
@@ -52,7 +50,7 @@ export default (props) => {
                 let temp = []
                 res.data.map(d => {
                     temp.push({
-                        src: "http://localhost:8080/" + d.filename,
+                        src: `${host}/${d.filename}`,
                     })
                 })
                 console.log(temp)
@@ -60,30 +58,7 @@ export default (props) => {
             })
             .catch(err => console.log(err))
     }
-    const openLightbox = useCallback((event, { photo, index }) => {
-        setCurrentImage(index);
-        setViewerIsOpen(true);
-    }, []);
 
-    const closeLightbox = () => {
-        setCurrentImage(0);
-        setViewerIsOpen(false);
-    };
-    const PublishGallery = () => {
-        publishGallery(gallery.id, { "is_publish": !gallery.is_publish }, token)
-            .then(res => {
-                console.log('set publish to ', !gallery.is_publish)
-                fetchGallery()
-            })
-            .catch(err => console.log(err))
-    }
-    const DeleteGallery = useCallback(() => {
-        deleteGallery(gallery.id, token)
-            .then(res => {
-                history.goBack()
-            })
-            .catch(err => console.log(err))
-    }, [gallery.id, token])
     const CheckAuth = () => {
         if (token === null) {
             return true
@@ -94,6 +69,14 @@ export default (props) => {
                 return true
             }
         }
+    }
+    const PublishGallery = () => {
+        publishGallery(gallery.id, { "is_publish": !gallery.is_publish }, token)
+            .then(res => {
+                console.log('set publish to ', !gallery.is_publish)
+                fetchGallery()
+            })
+            .catch(err => console.log(err))
     }
     console.log(CheckAuth())
     useEffect(() => {
@@ -106,27 +89,31 @@ export default (props) => {
                 <Col span={16}>
                     <Divider />
                     <Row style={{}} justify='space-between' align="middle">
+                        <Col style={{ marginLeft: 20 }}>
+                            <Link to='/'>
+                                <FontAwesomeIcon icon={faArrowLeft} size='lg' />
+                            </Link>
+                        </Col>
                         <Col>
                             <Row>
-                                <TextHead>&nbsp;{gallery.name}</TextHead>
+                                <TextHead>{gallery.name}</TextHead>
                             </Row>
-                            {/* <Row>
-                                {gallery.is_publish ?
-                                    <Typography.Text >&nbsp;Published</Typography.Text>
-                                    :
-                                    <Typography.Text >&nbsp;Draft</Typography.Text>
-                                }
-                            </Row> */}
                         </Col>
-                        <Col >
+                        <Col style={{ marginRight: 20 }}>
                             {CheckAuth() ?
                                 null
                                 :
                                 <>
-                                    <Button onClick={PublishGallery}>Publish</Button>&nbsp;
-                                <Link to={"/gallery/" + props.match.params.id + "/edit"}><Button>Edit</Button></Link>&nbsp;
-                                <Button onClick={DeleteGallery}>Delete</Button>
+                                    {!gallery.is_publish ?
+                                        <b onClick={PublishGallery}><FontAwesomeIcon icon={faShieldAlt} size='lg' color='blue' /></b>
+                                        :
+                                        <b onClick={PublishGallery}><FontAwesomeIcon icon={faGlobe} size='lg' color='blue' /></b>
+                                    }&nbsp;&nbsp;
+                                <Link to={`/gallery/${props.match.params.id}/edit`}>
+                                        <FontAwesomeIcon icon={faEdit} size='lg' />
+                                    </Link>
                                 </>
+
                             }
 
                         </Col>
@@ -134,33 +121,16 @@ export default (props) => {
                     <Divider />
                 </Col>
             </Row>
-
             <Row justify='center'>
                 <Col span={20}>
                     {images.length === 0 ?
                         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                         :
                         // <Gallery photos={images} onClick={openLightbox} />
-                        <ResponsiveGallery images={images} useLightBox={true}/>
+                        <ResponsiveGallery images={images} useLightBox={true} />
                     }
                 </Col>
             </Row>
-            <ModalGateway>
-                {viewerIsOpen ? (
-                    <Modal onClose={closeLightbox}>
-                        <Carousel
-                            currentIndex={currentImage}
-                            views={images.map(x => ({
-                                ...x,
-                                srcset: x.srcSet,
-                                caption: x.title
-                            }))}
-                        />
-                    </Modal>
-                ) : null}
-            </ModalGateway>
-            <br />
-            <br />
         </>
     )
 }

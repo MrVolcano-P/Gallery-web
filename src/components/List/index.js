@@ -21,7 +21,7 @@ export default (props) => {
 `
     const Text = styled.p`
     font-size:20;
-`
+`   
     return (
         <List
             itemLayout="vertical"
@@ -34,7 +34,7 @@ export default (props) => {
             }}
             dataSource={props.data}
             renderItem={item => (
-                <Link to={"/gallery/" + item.id} style={{ color: 'inherit', textDecoration: 'inherit' }}>
+                <Link to={`/gallery/${item.id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
                     <RowCus align='middle' style={{ height: 100, marginTop: 5, marginBottom: 5, marginLeft: 10, marginRight: 10 }}>
                         <Col span={20}>
                             <Row style={{ marginLeft: 30 }}>
@@ -56,17 +56,13 @@ export default (props) => {
                         <Col span={4}>
                             <Row>
                                 {item.is_publish ?
-                                    // <Typography.Text>
                                     <>
                                         Status &nbsp; Published
                                     </>
-                                    // </Typography.Text>
                                     :
-                                    // <Typography.Text>
                                     <>
-                                        Status & nbsp; Draft
-                                </>
-                                    // </Typography.Text> 
+                                        Status &nbsp; Draft
+                                    </>
                                 }
                             </Row>
                             <Row>

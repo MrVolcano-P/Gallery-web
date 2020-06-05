@@ -52,7 +52,7 @@ export default () => {
                             <Button><Typography.Text strong>My Gallery</Typography.Text></Button>
                         </Link>&nbsp;
                         <Dropdown overlay={menu} placement="bottomLeft">
-                            <Button><Typography.Text strong style={{ color: 'red' }}>{profile?.name}&nbsp;<FontAwesomeIcon icon={faCaretDown} /></Typography.Text></Button>
+                            <Button><Typography.Text strong style={{ color: 'black' }}>{profile?.name}&nbsp;<FontAwesomeIcon icon={faCaretDown} /></Typography.Text></Button>
                         </Dropdown>&nbsp;
                     </>
                 }

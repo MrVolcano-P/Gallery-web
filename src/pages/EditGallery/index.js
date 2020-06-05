@@ -1,15 +1,15 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import Gallery from "react-photo-gallery";
-import Carousel, { Modal, ModalGateway } from "react-images";
-import { Typography, Row, Col, Button, Divider, Switch } from 'antd';
-import Axios from 'axios';
+import { Row, Col, Divider, Typography } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { getGalleryByid, getImagesByGalleryID, host, deleteImages, updateName, getGalleryByidAndCheckAuth } from '../../api/gallery';
+import { getGalleryByid, getImagesByGalleryID, host, deleteImages, updateName, getGalleryByidAndCheckAuth, publishGallery, deleteGallery } from '../../api/gallery';
 import { Link, useHistory } from 'react-router-dom';
 import ModalAddImage from './modalAddImage';
+import ModalChangeName from '../../components/ModalChangeName'
 import _ from 'lodash'
 import styled from 'styled-components';
 import ImageShow from '../../components/ImageShow'
+import { faArrowLeft, faTrash, faUpload, faGlobe, faShieldAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const TextHead = styled.h3`
     color: white;
     text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
@@ -18,6 +18,7 @@ const TextHead = styled.h3`
 export default (props) => {
     const token = useSelector(state => state.authToken)
     const [gallery, setGallery] = useState({})
+    const [modalChangeVisible, setModalChangeVisible] = useState(false)
     const [currentImage, setCurrentImage] = useState(0);
     const [viewerIsOpen, setViewerIsOpen] = useState(false);
     const [images, setImages] = useState([])
@@ -60,48 +61,36 @@ export default (props) => {
     const fetchImages = useCallback((id) => {
         getImagesByGalleryID(id)
             .then(res => {
-                setRawImage(res.data)
+                // console.log(res.data)
                 let temp = []
                 res.data.map(d => {
-                    let w = Math.floor(Math.random() * 7) + 4
-                    let h = Math.floor(Math.random() * 6) + 3
-                    console.log("w: ", w);
-                    let object = {
-                        src: host + "/" + d.filename,
-                        maxWidth: 4,
-                        height: 3,
-                    }
-                    temp.push(object)
+                    temp.push({
+                        src: `${host}/${d.filename}`,
+                    })
                 })
-                console.log('test: ', temp)
+                console.log(temp)
                 setImages(temp)
             })
             .catch(err => console.log(err))
     }, [])
 
-    const onChange = str => {
-        console.log('Content change:', str);
-        setName(str)
-        updateName(gallery.id, { Name: str }, token)
+
+    // const PublishGallery = () => {
+    //     publishGallery(gallery.id, { "is_publish": !gallery.is_publish }, token)
+    //         .then(res => {
+    //             console.log('set publish to ', !gallery.is_publish)
+    //             fetchGallery()
+    //         })
+    //         .catch(err => console.log(err))
+    // }
+    const DeleteGallery = useCallback(() => {
+        deleteGallery(gallery.id, token)
             .then(res => {
-                console.log('Update name to', str)
-                setName(str)
+                history.push('/gallery/owner/all')
             })
             .catch(err => console.log(err))
-    };
-    
-    const DeleteImages = () => {
-        console.log('showdel', deleteTemp)
-        // console.log(token)
-        deleteImages(gallery.id, { filenames: deleteTemp }, token)
-            .then((res) => {
-                console.log('success')
-                fetchImages(gallery.id)
-                // props.fetchImages()
-                // props.setVisible(false)
-            })
-            .catch(err => console.log(err))
-    }
+    }, [gallery.id, token])
+
     useEffect(() => {
         fetchGallery()
     }, [])
@@ -111,34 +100,34 @@ export default (props) => {
                 <Col span={16}>
                     <Divider />
                     <Row style={{}} justify='space-between' align="middle">
+                        <Col style={{ marginLeft: 20 }}>
+                            <Link to={`/gallery/${props.match.params.id}`}>
+                                <FontAwesomeIcon icon={faArrowLeft} size='lg' />
+                            </Link>
+                        </Col>
                         <Col>
                             <Row>
-                                <TextHead editable={{ onChange: onChange }} level={3} >
-                                    {name}
+                                <TextHead>
+                                    {name}&nbsp;
+                                    <b onClick={() => setModalChangeVisible(true)}>
+                                        <FontAwesomeIcon icon={faEdit} size='sm' color='white' />
+                                    </b>
                                 </TextHead>
                             </Row>
-                            {/* <Row>
-                                {gallery.is_publish ?
-                                    <Typography.Text >&nbsp;Published</Typography.Text>
-                                    :
-                                    <Typography.Text >&nbsp;Draft</Typography.Text>
-                                }
-                            </Row> */}
                         </Col>
-                        {/* <Col>
-                            <Typography.Text>Mode </Typography.Text>
-                            <Switch checkedChildren="Delete" unCheckedChildren="View" onChange={(checked) => setChecked(checked)} />&nbsp;
+                        <Col style={{ marginRight: 20 }}>
+                            <div style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
+                                <b onClick={() => setModalVisible(true)}><FontAwesomeIcon icon={faUpload} size='lg' color='red' /></b>&nbsp;&nbsp;
+                                {/* {gallery.is_publish ?
+                                    <b onClick={PublishGallery}><FontAwesomeIcon icon={faShieldAlt} size='lg' color='blue' /></b>
+                                    :
+                                    <b onClick={PublishGallery}><FontAwesomeIcon icon={faGlobe} size='lg' color='blue' /></b>
+                                }&nbsp;&nbsp; */}
+                                <b onClick={DeleteGallery}>
+                                    <FontAwesomeIcon icon={faTrash} size='lg' color='white' />
+                                </b>
+                            </div>
 
-                            
-                            {checked ?
-                                <Button onClick={DeleteImages}>Delete</Button>
-                                :
-                                null
-                            }
-                        </Col> */}
-                        <Col >
-                            <Button onClick={() => setModalVisible(true)}>Add Images</Button>&nbsp;
-                            <Link to={"/gallery/" + props.match.params.id}><Button>Done</Button></Link>&nbsp;
                         </Col>
                     </Row>
                     <Divider />
@@ -156,9 +145,16 @@ export default (props) => {
                         galleryId={gallery.id}
                         fetchImages={() => fetchImages(gallery.id)}
                     />
+                    <ModalChangeName
+                        visible={modalChangeVisible}
+                        setVisible={(v) => setModalChangeVisible(v)}
+                        name={name}
+                        galleryId={gallery.id}
+                        fetchGallery={() => fetchGallery()}
+                        setName={setName}
+                    />
                 </Col>
             </Row>
-
             <br />
             <br />
         </>

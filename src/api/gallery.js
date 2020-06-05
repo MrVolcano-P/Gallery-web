@@ -11,14 +11,14 @@ export function getGalleryByid(id) {
 export function getGalleryByidAndCheckAuth(id, token) {
     return axios.get(`${host}/user/galleries/${id}`, {
         headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: `Bearer ${token}`
         }
     })
 }
 export function getGalleryByToken(token) {
     return axios.get(`${host}/user/galleries`, {
         headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: `Bearer ${token}`
         }
     })
 }
@@ -28,28 +28,28 @@ export function getImagesByGalleryID(id) {
 export function addGallery(data, token) {
     return axios.post(`${host}/user/galleries`, data, {
         headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: `Bearer ${token}`
         }
     })
 }
 export function updateName(id, data, token) {
     return axios.patch(`${host}/user/galleries/${id}/names`, data, {
         headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: `Bearer ${token}`
         }
     })
 }
 export function publishGallery(id, data, token) {
     return axios.patch(`${host}/user/galleries/${id}/publishes`, data, {
         headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: `Bearer ${token}`
         }
     })
 }
 export function deleteGallery(id, token) {
     return axios.delete(`${host}/user/galleries/${id}`, {
         headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: `Bearer ${token}`
         }
     })
 }
@@ -70,14 +70,14 @@ export function logout(token) {
 export function upload(id, formdata, token) {
     return axios.post(`${host}/user/galleries/${id}/images`, formdata, {
         headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: `Bearer ${token}`
         }
     })
 }
 export function getProfile(token) {
     return axios.get(`${host}/user/profile`, {
         headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: `Bearer ${token}`
         }
     })
 }

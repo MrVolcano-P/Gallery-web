@@ -1,24 +1,34 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Formik, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import styles from './style'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, getProfile } from '../../api/gallery';
 import { setAuthToken } from '../../action/authToken'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { setProfile } from '../../action/profile'
-const Button = styled.button`
-    background-color: #942A96 !important;
-    color: #fff !important;
-    font-family: Roboto;
-    font-weight: 700;
-    &&:hover{
-        background-color: #872589 !important;
-    }
-`
+import {
+    SubmitButton,
+    Input,
+    Checkbox,
+    ResetButton,
+    FormikDebug,
+    Form,
+    FormItem,
+} from "formik-antd"
+import { message, Button, Row, Col, Typography } from "antd"
+// const Button = styled.button`
+//     background-color: #942A96 !important;
+//     color: #fff !important;
+//     font-family: Roboto;
+//     font-weight: 700;
+//     &&:hover{
+//         background-color: #872589 !important;
+//     }
+// `
 
-const RegisterSchema = Yup.object().shape({
+const SignupSchema = Yup.object().shape({
     email: Yup.string()
         .email('Invalid email')
         .required('This field is required.'),
@@ -26,7 +36,9 @@ const RegisterSchema = Yup.object().shape({
         .min(3, 'Please Enter less then 3 letters')
         .required('This field is required.'),
 });
-
+function validateRequired(value) {
+    return value ? undefined : "required"
+}
 export default () => {
     const dispatch = useDispatch()
     const history = useHistory();
@@ -40,67 +52,76 @@ export default () => {
             .catch(err => console.log(err))
     }
     return (
-        <div>
-            <div className="row justify-content-center" style={styles.row}>
-                <div className="col-md-3">
-                    <div className="row justify-content-center">
-                        <div className="col-md-12" style={styles.txt1}>
-                            Login
-                        </div>
-                        <div className="col-md-12">
-                            <Formik
-                                initialValues={{
-                                    email: '',
-                                    password: ''
-                                }}
-                                validationSchema={RegisterSchema}
-                                onSubmit={values => {
-                                    // same shape as initial values
-                                    console.log(values);
-                                    login(values)
-                                        .then(res => {
-                                            console.log(res.data)
-                                            dispatch(setAuthToken(res.data.token))
-                                            SetProfile(res.data.token)
 
-                                        })
-                                        .catch(err => console.log(err))
-                                }}
-                            >
-                                {({ errors, touched }) => (
-                                    <Form>
-                                        <div className="form-group">
-                                            <label htmlFor="email" style={styles.txt2}>Email address</label>
-                                            <Field
-                                                name="email"
-                                                type="email"
-                                                className={`form-control ${touched.email ? errors.email ? 'is-invalid' : 'is-valid' : ''}`}
-                                                id="email"
-                                                placeholder="Enter email"
-                                            />
-                                            <ErrorMessage component="div" name="email" className="invalid-feedback" />
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="password" style={styles.txt2}>Password</label>
-                                            <Field name="password"
-                                                type="password"
-                                                className={`form-control ${touched.password ? errors.password ? 'is-invalid' : 'is-valid' : ''}`}
-                                                id="password"
-                                                placeholder="Password"
-                                            />
-                                            <ErrorMessage component="div" name="password" className="invalid-feedback" />
-                                        </div>
-                                        <button type="submit" className="btn btn-success" style={{ width: '100%' }}>Login</button>
-                                        <div style={{ height: 10 }} />
-                                        <button onClick={() => history.push("/signup")} className="btn btn-secondary" style={{ width: '100%' }}>Signup</button>
-                                    </Form>
-                                )}
-                            </Formik>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div >
+        <Row justify='center' >
+            <Col span={8} flex='1'>
+                <Formik
+                    initialValues={{
+                        email: "",
+                        password: "",
+                    }}
+                    onSubmit={(values, actions) => {
+                        console.log(JSON.stringify(values, null, 4))
+                        login(values)
+                            .then(res => {
+                                console.log(res.data)
+                                dispatch(setAuthToken(res.data.token))
+                                SetProfile(res.data.token)
+
+                            })
+                            .catch(err => console.log(err))
+                        actions.resetForm()
+                    }}
+                    validationSchema={SignupSchema}
+                    render={() => (
+                        <Form
+                            style={{ marginTop: '25%' }}
+                            layout='vertical'
+                        // labelCol={{ xs: 4 }}
+                        // wrapperCol={{ xs: 20 }}
+                        >
+                            <div style={{ background: "white", padding: 40, flex: 1 }}>
+                                <Typography.Title>Login</Typography.Title>
+                                {/* <Typography.Text>Email</Typography.Text> */}
+                                <FormItem
+                                    name="email"
+                                    label="Email"
+                                    required={true}
+                                    hasFeedback={true}
+                                    showValidateSuccess={true}
+                                >
+                                    <Input name="email" placeholder="Email" />
+                                </FormItem>
+                                {/* <Typography.Text>Email</Typography.Text> */}
+                                <FormItem
+                                    name="password"
+                                    label="Password"
+                                    required={true}
+                                    hasFeedback={true}
+                                    showValidateSuccess={true}
+                                >
+                                    <Input.Password name="password" placeholder="Password" />
+                                </FormItem>
+                                <Row style={{ marginTop: 60 }}>
+                                    <Col offset={8}>
+                                        <Button.Group>
+                                            <ResetButton>Reset</ResetButton>&nbsp;
+                                            <SubmitButton>Submit</SubmitButton>
+                                        </Button.Group>
+                                    </Col>
+                                    <Col offset={8}>
+                                        <Link to='/signup'>
+                                            <Typography.Text>Not have an Account ?</Typography.Text>
+                                        </Link>
+
+                                    </Col>
+                                </Row>
+                            </div>
+                        </Form>
+                    )}
+                />
+            </Col>
+        </Row>
     );
 }
 

@@ -4,6 +4,8 @@ import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/ico
 import { deleteImage, host } from '../../api/gallery';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 const RowMain = styled(Row)`
     background-color: #1b1b1b;
     border:1px solid rgba(31, 255, 255,0.19);
@@ -35,7 +37,7 @@ export default (props) => {
                     <Col span={6} >
                         <RowMain>
                             <Col>
-                                <Row style={{ width: 'auto', height: 300 }}>
+                                <Row style={{ width: 'auto', height: 250 }}>
                                     <img
                                         alt="example"
                                         src={i.src}
@@ -44,9 +46,10 @@ export default (props) => {
                                 </Row>
                                 <Row justify='center'>
                                     <Col>
-                                        <Button onClick={() => DeleteImage(i.src)}>Delete</Button>
+                                        <b onClick={() => DeleteImage(i.src)}><FontAwesomeIcon icon={faTrashAlt} size='lg' color='white' /></b>
                                     </Col>
                                 </Row>
+                                <br></br>
                             </Col>
                         </RowMain>
                     </Col>
