@@ -9,6 +9,7 @@ import ResponsiveGallery from 'react-responsive-gallery';
 import { faArrowLeft, faEdit, faShieldAlt, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { EyeInvisibleOutlined, EyeOutlined, EditOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import { Success } from '../../components/Message';
 const TextHead = styled.h3`
     color: white;
     text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
@@ -47,14 +48,12 @@ export default (props) => {
     const fetchImages = (id) => {
         getImagesByGalleryID(id)
             .then(res => {
-                // console.log(res.data)
                 let temp = []
                 res.data.map(d => {
                     temp.push({
                         src: `${host}/${d.filename}`,
                     })
                 })
-                console.log(temp)
                 setImages(temp)
             })
             .catch(err => console.log(err))
@@ -74,8 +73,15 @@ export default (props) => {
     const PublishGallery = () => {
         publishGallery(gallery.id, { "is_publish": !gallery.is_publish }, token)
             .then(res => {
-                console.log('set publish to ', !gallery.is_publish)
+                // console.log('set publish to ', !gallery.is_publish)
                 fetchGallery()
+                {
+                    !gallery.is_publish ?
+                    Success('Gallery Published')
+                    :
+                    Success('Gallery Back To Draft Mode')
+                }
+                Success()
             })
             .catch(err => console.log(err))
     }
@@ -83,7 +89,6 @@ export default (props) => {
     useEffect(() => {
         fetchGallery()
     }, [])
-    console.log()
     return (
         <>
             <Row justify='center'>

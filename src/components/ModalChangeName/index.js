@@ -5,6 +5,7 @@ import { upload, addGallery, updateName } from '../../api/gallery';
 import { useSelector } from 'react-redux';
 import { InboxOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
+import { Success } from '../Message';
 export default (props) => {
     const history = useHistory()
     const token = useSelector(state => state.authToken)
@@ -15,6 +16,7 @@ export default (props) => {
                 console.log('Update name to', props.name)
                 props.setVisible(false)
                 props.fetchGallery()
+                Success('Gallery Name Updated')
             })
             .catch(err => console.log(err))
     };

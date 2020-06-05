@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { Success } from '../Message';
 const RowMain = styled(Row)`
     background-color: #1b1b1b;
     border:1px solid rgba(31, 255, 255,0.19);
@@ -27,6 +28,7 @@ export default (props) => {
             .then(res => {
                 console.log('success')
                 props.fetchImages()
+                Success('Deleted Image')
             })
             .catch(err => console.log(err))
     }

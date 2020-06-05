@@ -5,6 +5,7 @@ import { upload, addGallery } from '../../api/gallery';
 import { useSelector } from 'react-redux';
 import { InboxOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
+import { Success } from '../Message';
 export default (props) => {
     const token = useSelector(state => state.authToken)
     const [name, setName] = useState('')
@@ -52,6 +53,7 @@ export default (props) => {
                 // props.fetchImages()
                 // props.setVisible(false)
                 history.push('/gallery/' + id)
+                Success('Created New Gallery')
             })
             .catch(err => console.log(err))
     }

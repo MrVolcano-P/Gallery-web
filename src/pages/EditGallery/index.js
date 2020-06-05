@@ -11,6 +11,7 @@ import ImageShow from '../../components/ImageShow'
 import { faArrowLeft, faTrash, faUpload, faGlobe, faShieldAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ArrowLeftOutlined, UploadOutlined, DeleteOutlined, FormOutlined } from '@ant-design/icons';
+import { Success } from '../../components/Message';
 const TextHead = styled.h3`
     color: white;
     text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
@@ -43,6 +44,7 @@ export default (props) => {
             .catch(err => {
                 console.log(err.data)
                 console.log('error')
+                Error('This Gallery is in draft mode')
                 fetchGalleryAndCheckAuth()
             })
     }
@@ -57,6 +59,7 @@ export default (props) => {
                 console.log(err)
                 console.log('error in auth')
                 history.push('/')
+                Error('Not have permission')
             })
     }
     const fetchImages = useCallback((id) => {
@@ -88,6 +91,7 @@ export default (props) => {
         deleteGallery(gallery.id, token)
             .then(res => {
                 history.push('/gallery/owner/all')
+                Success('Deleted Gallery ' + gallery.name)
             })
             .catch(err => console.log(err))
     }, [gallery.id, token])

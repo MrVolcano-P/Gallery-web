@@ -16,6 +16,7 @@ import {
 import { message, Button, Row, Col, Typography } from "antd"
 import { setProfile } from '../action/profile'
 import { getProfile, updateProfile } from '../api/gallery'
+import { Success } from '../components/Message'
 // const Button = styled.button`
 //   background-color: #942A96 !important;
 //   color: #fff !important;
@@ -54,6 +55,7 @@ export default () => {
                                 dispatch(setProfile(res.data))
                                 history.push('/user/profile')
                                 actions.setSubmitting(false)
+                                Success('Profile Updated')
                             })
                             .catch(err => console.log(err))
 
