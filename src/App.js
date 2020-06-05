@@ -1,12 +1,11 @@
 import React from 'react';
-import './App.css';
 import Routing from './routes'
 function App() {
-  document.body.style.backgroundColor = '#292929'
+  // document.body.style.backgroundColor = '#292929'
   return (
-    // <div className="App">
+    <div className="App">
       <Routing />
-    // </div>
+    </div>
   );
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 import Home from '../pages/Home';
-import nav from '../nav';
+import Nav from '../nav';
 import Gallery from '../pages/Gallery';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
@@ -12,7 +12,7 @@ import PrivateRoute from './privateRoute';
 import Profile from '../Profile'
 export default () => (
     <BrowserRouter>
-        <Route path="/" component={nav} />
+        <Nav />
         <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/gallery/:id" component={Gallery} />
