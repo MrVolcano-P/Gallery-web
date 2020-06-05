@@ -46,15 +46,11 @@ export default () => {
                 <Col span={14}>
                     <Row justify='center' align="middle">
                         <Col span={8} >
-                            {/* <Typography.Title level={2}>List All Gallery </Typography.Title> */}
                             <TextHead>List All Gallery</TextHead>
                         </Col>
                         <Col span={8}>
                             <Search
                                 placeholder="input search text"
-                                // onSearch={value => console.log(value)}
-                                // enterButton={true}
-
                                 onChange={(e) => setKey(e.target.value)}
                             />
                         </Col>
@@ -63,7 +59,6 @@ export default () => {
                                 {token === null ?
                                     null
                                     :
-                                    // <Button onClick={() => setModalVisible(true)} >Add</Button>
                                     <b onClick={() => setModalVisible(true)}><FontAwesomeIcon icon={faFolderPlus} size='lg' color='white' /></b>
                                 }
                             </Row>
@@ -76,7 +71,6 @@ export default () => {
                 <Col span={16}>
                     <List
                         data={gallerys.filter(g => g.name.includes(key))}
-                    // delete={DeleteGallery}
                     />
                 </Col>
             </Row>

@@ -22,7 +22,7 @@ export default (props) => {
     const [images, setImages] = useState([])
     const history = useHistory()
     const fetchGallery = () => {
-        getGalleryByid(props.match.params.id)
+        getGalleryByid(props.location.state.galId)
             .then(res => {
                 console.log(res.data)
                 setGallery(res.data)
@@ -34,7 +34,7 @@ export default (props) => {
             })
     }
     const fetchGalleryAndCheckAuth = () => {
-        getGalleryByidAndCheckAuth(props.match.params.id, token)
+        getGalleryByidAndCheckAuth(props.location.state.galId, token)
             .then(res => {
                 setGallery(res.data)
                 fetchImages(res.data.id)
@@ -73,19 +73,17 @@ export default (props) => {
     const PublishGallery = () => {
         publishGallery(gallery.id, { "is_publish": !gallery.is_publish }, token)
             .then(res => {
-                // console.log('set publish to ', !gallery.is_publish)
                 fetchGallery()
                 {
                     !gallery.is_publish ?
-                    Success('Gallery Published')
-                    :
-                    Success('Gallery Back To Draft Mode')
+                        Success('Gallery Published')
+                        :
+                        Success('Gallery Back To Draft Mode')
                 }
-                Success()
             })
             .catch(err => console.log(err))
     }
-    console.log(CheckAuth())
+    // console.log(props.location.state.galId)
     useEffect(() => {
         fetchGallery()
     }, [])
@@ -98,7 +96,6 @@ export default (props) => {
                         <Col style={{ marginLeft: 20 }}>
                             <div onClick={() => { gallery.is_publish ? history.push('/') : history.push('/gallery/owner/all') }}>
                                 <ArrowLeftOutlined style={{ fontSize: '24px', color: '#08c' }} />
-                                {/* <FontAwesomeIcon icon={faArrowLeft} size='lg' color='red' /> */}
                             </div>
                         </Col>
                         <Col>
@@ -116,9 +113,8 @@ export default (props) => {
                                         :
                                         <b onClick={PublishGallery}><EyeOutlined style={{ fontSize: '24px', color: 'green' }} /></b>
                                     }&nbsp;&nbsp;
-                                <Link to={`/gallery/${props.match.params.id}/edit`}>
+                                <Link to={{ pathname:`/gallery/edit`,state:{galId:props.location.state.galId}}}>
                                         <EditOutlined style={{ fontSize: '24px', color: 'white' }} />
-                                        {/* <FontAwesomeIcon icon={faEdit} size='lg' /> */}
                                     </Link>
                                 </>
 
@@ -132,9 +128,10 @@ export default (props) => {
             <Row justify='center'>
                 <Col span={20}>
                     {images.length === 0 ?
+                        <div>
                         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        </div>
                         :
-                        // <Gallery photos={images} onClick={openLightbox} />
                         <ResponsiveGallery images={images} useLightBox={true} />
                     }
                 </Col>

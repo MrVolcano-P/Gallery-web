@@ -48,6 +48,10 @@ color:#fff;
 const Br = styled.div`
     border-bottom:2px solid white;
 `
+const TextHead = styled(Typography.Title)`
+    color: white;
+    text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+`
 export default () => {
     const dispatch = useDispatch()
     const token = useSelector(state => state.authToken)
@@ -91,7 +95,7 @@ export default () => {
         <Row justify='space-between' align='middle' style={{ backgroundColor: '#1b1b1b' }}>
             <Col style={{ marginLeft: 20 }}>
                 <Link to="/" >
-                    <Typography.Title style={{ float: 'left', color: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Gallery</Typography.Title>
+                    <TextHead level={2} style={{ float: 'left',color:'#fff', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Gallery Hub</TextHead>
                 </Link>
             </Col>
             <Col style={{ marginRight: 20 }}>

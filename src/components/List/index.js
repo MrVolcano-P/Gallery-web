@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, Typography, Checkbox, Space, Avatar, Row, Col } from 'antd'
-import { Button } from 'antd'; import { Link } from 'react-router-dom';
+import { Button } from 'antd'; import { Link, useHistory } from 'react-router-dom';
 import { faBuilding, faUserTie, faFileAlt, faTable } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from 'moment'
@@ -22,6 +22,7 @@ export default (props) => {
     const Text = styled.p`
     font-size:20;
 `   
+    const history = useHistory()
     return (
         <List
             itemLayout="vertical"
@@ -34,24 +35,16 @@ export default (props) => {
             }}
             dataSource={props.data}
             renderItem={item => (
-                <Link to={`/gallery/${item.id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
+                <Link to={{ pathname:`/gallery`,state:{galId:item.id}}} style={{ color: 'inherit', textDecoration: 'inherit' }}>
                     <RowCus align='middle' style={{ height: 100, marginTop: 5, marginBottom: 5, marginLeft: 10, marginRight: 10 }}>
                         <Col span={20}>
                             <Row style={{ marginLeft: 30 }}>
-
-                                {/* <Typography.Text style={{ fontSize: 20, color: 'black' }}> */}
                                 <b style={{ color: 'inherit', textDecoration: 'inherit', fontSize: 24 }}>{item.name}</b>
-
-                                {/* </Typography.Text> */}
-
                             </Row>
                             <Row style={{ marginLeft: 30 }}>
-                                {/* <Typography.Text> */}
                                 <FontAwesomeIcon icon={faUserTie} />&nbsp;
                                 {item.owner.name}
-                                {/* </Typography.Text> */}
                             </Row>
-
                         </Col>
                         <Col span={4}>
                             <Row>

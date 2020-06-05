@@ -21,20 +21,15 @@ export default (props) => {
     const token = useSelector(state => state.authToken)
     const [gallery, setGallery] = useState({})
     const [modalChangeVisible, setModalChangeVisible] = useState(false)
-    const [currentImage, setCurrentImage] = useState(0);
-    const [viewerIsOpen, setViewerIsOpen] = useState(false);
     const [images, setImages] = useState([])
     const [rawImage, setRawImage] = useState([])
     const [name, setName] = useState('')
-    const [selectAll, setSelectAll] = useState(false);
-    const [checked, setChecked] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
-    const [deleteTemp, setDeleteTemp] = useState([])
 
     const dispatch = useDispatch()
     const history = useHistory()
     const fetchGallery = () => {
-        getGalleryByid(props.match.params.id)
+        getGalleryByid(props.location.state.galId)
             .then(res => {
                 console.log(res.data)
                 setGallery(res.data)
@@ -49,7 +44,7 @@ export default (props) => {
             })
     }
     const fetchGalleryAndCheckAuth = () => {
-        getGalleryByidAndCheckAuth(props.match.params.id, token)
+        getGalleryByidAndCheckAuth(props.location.state.galId, token)
             .then(res => {
                 setGallery(res.data)
                 setName(res.data.name)
@@ -65,7 +60,6 @@ export default (props) => {
     const fetchImages = useCallback((id) => {
         getImagesByGalleryID(id)
             .then(res => {
-                // console.log(res.data)
                 let temp = []
                 res.data.map(d => {
                     temp.push({
@@ -79,14 +73,6 @@ export default (props) => {
     }, [])
 
 
-    // const PublishGallery = () => {
-    //     publishGallery(gallery.id, { "is_publish": !gallery.is_publish }, token)
-    //         .then(res => {
-    //             console.log('set publish to ', !gallery.is_publish)
-    //             fetchGallery()
-    //         })
-    //         .catch(err => console.log(err))
-    // }
     const DeleteGallery = useCallback(() => {
         deleteGallery(gallery.id, token)
             .then(res => {
@@ -106,7 +92,7 @@ export default (props) => {
                     <Divider />
                     <Row style={{}} justify='space-between' align="middle">
                         <Col style={{ marginLeft: 20 }}>
-                            <Link to={`/gallery/${props.match.params.id}`}>
+                            <Link to={{ pathname:`/gallery`,state:{galId:props.location.state.galId}}}>
                                 <ArrowLeftOutlined style={{ fontSize: '24px', color: '#08c' }} />
                             </Link>
                         </Col>
@@ -126,11 +112,6 @@ export default (props) => {
                                 <b onClick={() => setModalVisible(true)}>
                                     <UploadOutlined style={{ fontSize: '24px', color: 'lightblue' }} />
                                 </b>&nbsp;&nbsp;
-                                {/* {gallery.is_publish ?
-                                    <b onClick={PublishGallery}><FontAwesomeIcon icon={faShieldAlt} size='lg' color='blue' /></b>
-                                    :
-                                    <b onClick={PublishGallery}><FontAwesomeIcon icon={faGlobe} size='lg' color='blue' /></b>
-                                }&nbsp;&nbsp; */}
                                 <b onClick={DeleteGallery}>
                                     {/* <FontAwesomeIcon icon={faTrash} size='lg' color='white' /> */}
                                     <DeleteOutlined style={{ fontSize: '24px', color: 'red' }} />

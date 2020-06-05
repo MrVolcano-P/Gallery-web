@@ -4,6 +4,7 @@ import { Upload, message } from 'antd';
 import { upload } from '../../api/gallery';
 import { useSelector } from 'react-redux';
 import { InboxOutlined } from '@ant-design/icons';
+import { Success } from '../../components/Message';
 export default function ModalAddImage(props) {
     const token = useSelector(state => state.authToken)
     const [antImages, setAntImages] = useState([]);
@@ -14,8 +15,6 @@ export default function ModalAddImage(props) {
         onChange(info) {
             const { status } = info.file;
             if (status !== 'uploading') {
-                // console.log(info.file, info.fileList);
-                // console.log('filelist', info.fileList)
                 setAntImages(info.fileList.map((f) => f.originFileObj));
             }
             if (status === 'done') {
@@ -34,9 +33,9 @@ export default function ModalAddImage(props) {
         console.log(form)
         upload(props.galleryId, form, token)
             .then((res) => {
-                console.log('success')
                 props.fetchImages()
                 props.setVisible(false)
+                Success('Upload Image to gallery')
             })
             .catch(err => console.log(err))
     }
