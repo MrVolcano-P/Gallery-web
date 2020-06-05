@@ -81,6 +81,13 @@ export function getProfile(token) {
         }
     })
 }
+export function updateProfile(data, token) {
+    return axios.post(`${host}/user/profile`, data, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
 export function deleteImages(id, data, token) {
     console.log('tokenAPi', token)
     return axios.delete(`${host}/user/galleries/${id}/images`, {

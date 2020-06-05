@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import ResponsiveGallery from 'react-responsive-gallery';
 import { faArrowLeft, faEdit, faShieldAlt, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EyeInvisibleOutlined, EyeOutlined, EditOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 const TextHead = styled.h3`
     color: white;
     text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
@@ -90,9 +91,10 @@ export default (props) => {
                     <Divider />
                     <Row style={{}} justify='space-between' align="middle">
                         <Col style={{ marginLeft: 20 }}>
-                            <Link to='/'>
-                                <FontAwesomeIcon icon={faArrowLeft} size='lg' />
-                            </Link>
+                            <div onClick={() => { gallery.is_publish ? history.push('/') : history.push('/gallery/owner/all') }}>
+                                <ArrowLeftOutlined style={{ fontSize: '24px', color: '#08c' }} />
+                                {/* <FontAwesomeIcon icon={faArrowLeft} size='lg' color='red' /> */}
+                            </div>
                         </Col>
                         <Col>
                             <Row>
@@ -105,12 +107,13 @@ export default (props) => {
                                 :
                                 <>
                                     {!gallery.is_publish ?
-                                        <b onClick={PublishGallery}><FontAwesomeIcon icon={faShieldAlt} size='lg' color='blue' /></b>
+                                        <b onClick={PublishGallery}><EyeInvisibleOutlined style={{ fontSize: '24px', color: 'red' }} /></b>
                                         :
-                                        <b onClick={PublishGallery}><FontAwesomeIcon icon={faGlobe} size='lg' color='blue' /></b>
+                                        <b onClick={PublishGallery}><EyeOutlined style={{ fontSize: '24px', color: 'green' }} /></b>
                                     }&nbsp;&nbsp;
                                 <Link to={`/gallery/${props.match.params.id}/edit`}>
-                                        <FontAwesomeIcon icon={faEdit} size='lg' />
+                                        <EditOutlined style={{ fontSize: '24px', color: 'white' }} />
+                                        {/* <FontAwesomeIcon icon={faEdit} size='lg' /> */}
                                     </Link>
                                 </>
 

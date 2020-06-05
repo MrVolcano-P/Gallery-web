@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { Formik, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
-import styles from './style'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, getProfile, signup } from '../../api/gallery';
 import { setAuthToken } from '../../action/authToken'
@@ -18,6 +17,7 @@ import {
     FormItem,
 } from "formik-antd"
 import { message, Button, Row, Col, Typography } from "antd"
+import { Success } from '../../components/Message'
 // const Button = styled.button`
 //   background-color: #942A96 !important;
 //   color: #fff !important;
@@ -57,6 +57,7 @@ export default () => {
                 console.log(res.data)
                 dispatch(setProfile(res.data))
                 history.push("/")
+                Success('Welcome')
             })
             .catch(err => console.log(err))
     }
@@ -76,7 +77,6 @@ export default () => {
                                     console.log(res.data)
                                     dispatch(setAuthToken(res.data.token))
                                     SetProfile(res.data.token)
-
                                 })
                                 .catch(err => console.log(err))
                         }).catch(err => console.log(err))
@@ -87,12 +87,9 @@ export default () => {
                         <Form
                             style={{ marginTop: '8%' }}
                             layout='vertical'
-                        // labelCol={{ xs: 4 }}
-                        // wrapperCol={{ xs: 20 }}
                         >
                             <div style={{ background: "white", padding: 40, flex: 1 }}>
                                 <Typography.Title>SignUp</Typography.Title>
-                                {/* <Typography.Text>Email</Typography.Text> */}
                                 <FormItem
                                     name="name"
                                     label="Name"
@@ -111,7 +108,6 @@ export default () => {
                                 >
                                     <Input name="email" placeholder="Email" />
                                 </FormItem>
-                                {/* <Typography.Text>Email</Typography.Text> */}
                                 <FormItem
                                     name="password"
                                     label="Password"

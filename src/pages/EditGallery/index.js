@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import ImageShow from '../../components/ImageShow'
 import { faArrowLeft, faTrash, faUpload, faGlobe, faShieldAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ArrowLeftOutlined, UploadOutlined, DeleteOutlined, FormOutlined } from '@ant-design/icons';
 const TextHead = styled.h3`
     color: white;
     text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
@@ -102,7 +103,7 @@ export default (props) => {
                     <Row style={{}} justify='space-between' align="middle">
                         <Col style={{ marginLeft: 20 }}>
                             <Link to={`/gallery/${props.match.params.id}`}>
-                                <FontAwesomeIcon icon={faArrowLeft} size='lg' />
+                                <ArrowLeftOutlined style={{ fontSize: '24px', color: '#08c' }} />
                             </Link>
                         </Col>
                         <Col>
@@ -110,21 +111,25 @@ export default (props) => {
                                 <TextHead>
                                     {name}&nbsp;
                                     <b onClick={() => setModalChangeVisible(true)}>
-                                        <FontAwesomeIcon icon={faEdit} size='sm' color='white' />
+                                        {/* <FontAwesomeIcon icon={faEdit} size='sm' color='white' /> */}
+                                        <FormOutlined style={{ fontSize: '24px', color: 'white' }} />
                                     </b>
                                 </TextHead>
                             </Row>
                         </Col>
                         <Col style={{ marginRight: 20 }}>
                             <div style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
-                                <b onClick={() => setModalVisible(true)}><FontAwesomeIcon icon={faUpload} size='lg' color='red' /></b>&nbsp;&nbsp;
+                                <b onClick={() => setModalVisible(true)}>
+                                    <UploadOutlined style={{ fontSize: '24px', color: 'lightblue' }} />
+                                </b>&nbsp;&nbsp;
                                 {/* {gallery.is_publish ?
                                     <b onClick={PublishGallery}><FontAwesomeIcon icon={faShieldAlt} size='lg' color='blue' /></b>
                                     :
                                     <b onClick={PublishGallery}><FontAwesomeIcon icon={faGlobe} size='lg' color='blue' /></b>
                                 }&nbsp;&nbsp; */}
                                 <b onClick={DeleteGallery}>
-                                    <FontAwesomeIcon icon={faTrash} size='lg' color='white' />
+                                    {/* <FontAwesomeIcon icon={faTrash} size='lg' color='white' /> */}
+                                    <DeleteOutlined style={{ fontSize: '24px', color: 'red' }} />
                                 </b>
                             </div>
 

@@ -8,9 +8,46 @@ import { setAuthToken } from "../action/authToken";
 import { logout } from "../api/gallery";
 import { setProfile } from "../action/profile";
 import ModalAddGallery from '../components/ModalAddGallery'
-import { faBuilding, faUserTie, faFileAlt, faTable, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { faBuilding, faUserTie, faFileAlt, faTable, faCaretDown, faSignOutAlt, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import styled from "styled-components";
+const MenuButton = styled(Button)`
+    color:#fff;
+    background-color: #1b1b1b;
+    border:2px solid rgba(31, 255, 255,0.19);
+    font-family: Roboto;
+    font-weight: 700;
+    &&:hover{
+        background-color: #e2e2e2;
+        color:#000
+    }
+`
+const MeNu = styled(Menu)`
+color:#fff;
+    background-color: #1b1b1b;
+    border:1px solid rgba(31, 255, 255,0.19);
+    font-family: Roboto;
+    font-weight: 700;
+    height:100%;
+    &&:hover{
+        background-color: #e2e2e2;
+        color:#000
+    }
+`
+const MenuItem = styled(Menu.Item)`
+color:#fff;
+    background-color: #1b1b1b;
+    font-family: Roboto;
+    font-weight: 700;
+    height:100%;
+    &&:hover{
+        background-color: #e2e2e2;
+        color:#000
+    }
+`
+const Br = styled.div`
+    border-bottom:2px solid white;
+`
 export default () => {
     const dispatch = useDispatch()
     const token = useSelector(state => state.authToken)
@@ -26,14 +63,30 @@ export default () => {
             })
     }
     const menu = (
-        <Menu>
-            <Menu.Item>
-                <a onClick={logOut}>
-                    LogOut &nbsp;
+        <MeNu>
+            <MenuItem>
+                <a onClick={() => history.push('/user/profile')}>
+                    <Row justify='space-between'>
+                        EditProfile
+                        <FontAwesomeIcon icon={faUserEdit} />
+                    </Row>
                 </a>
-            </Menu.Item>
-        </Menu >
+            </MenuItem>
+            <Br />
+            <MenuItem>
+                <a onClick={logOut}>
+                    <Row justify='space-between'>
+                        Signout
+                        <FontAwesomeIcon icon={faSignOutAlt} />
+                    </Row>
+
+                </a>
+            </MenuItem>
+        </MeNu >
     );
+    useEffect(() => {
+        
+    }, [])
     return (
         <Row justify='space-between' align='middle' style={{ backgroundColor: '#1b1b1b' }}>
             <Col style={{ marginLeft: 20 }}>
@@ -44,15 +97,15 @@ export default () => {
             <Col style={{ marginRight: 20 }}>
                 {token === null ?
                     <Link to="/login" >
-                        <Button>Login</Button>
+                        <MenuButton>Login</MenuButton>
                     </Link>
                     :
                     <>
                         <Link to="/gallery/owner/all" >
-                            <Button><Typography.Text strong>My Gallery</Typography.Text></Button>
+                            <MenuButton><p>My Gallery</p></MenuButton>
                         </Link>&nbsp;
                         <Dropdown overlay={menu} placement="bottomLeft">
-                            <Button><Typography.Text strong style={{ color: 'black' }}>{profile?.name}&nbsp;<FontAwesomeIcon icon={faCaretDown} /></Typography.Text></Button>
+                            <MenuButton><p>{profile?.name}&nbsp;<FontAwesomeIcon icon={faCaretDown} /></p></MenuButton>
                         </Dropdown>&nbsp;
                     </>
                 }
