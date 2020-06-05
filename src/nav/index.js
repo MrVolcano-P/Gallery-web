@@ -59,7 +59,6 @@ export default () => {
     const profile = useSelector(state => state.profile)
     const history = useHistory()
     const logOut = async () => {
-        console.log('logout: ', token)
         logout(token)
             .then(res => {
                 dispatch(setAuthToken(null))
@@ -107,7 +106,7 @@ export default () => {
                     </Link>
                     :
                     <>
-                        <Link to="/gallery/owner/all" >
+                        <Link to="/gallery/owner" >
                             <MenuButton><p>My Gallery</p></MenuButton>
                         </Link>&nbsp;
                         <Dropdown overlay={menu} placement="bottomLeft">

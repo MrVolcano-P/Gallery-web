@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Modal, Button, Row, Typography, Input } from 'antd'
-import { Upload, message } from 'antd';
-import { upload, addGallery, updateName } from '../../api/gallery';
+import {  updateName } from '../../api/gallery';
 import { useSelector } from 'react-redux';
-import { InboxOutlined } from '@ant-design/icons';
-import { useHistory } from 'react-router-dom';
 import { Success } from '../Message';
 export default (props) => {
-    const history = useHistory()
     const token = useSelector(state => state.authToken)
     const UpdateName = () => {
-        // console.log(props.name)
         updateName(props.galleryId, { Name: props.name }, token)
             .then(res => {
-                console.log('Update name to', props.name)
                 props.setVisible(false)
                 props.fetchGallery()
                 Success('Gallery Name Updated')

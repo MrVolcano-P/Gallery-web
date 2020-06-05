@@ -22,9 +22,8 @@ export default (props) => {
     const [images, setImages] = useState([])
     const history = useHistory()
     const fetchGallery = () => {
-        getGalleryByid(props.location.state.galId)
+        getGalleryByid(props.location.state?.galId)
             .then(res => {
-                console.log(res.data)
                 setGallery(res.data)
                 fetchImages(res.data.id)
             })
@@ -34,14 +33,13 @@ export default (props) => {
             })
     }
     const fetchGalleryAndCheckAuth = () => {
-        getGalleryByidAndCheckAuth(props.location.state.galId, token)
+        getGalleryByidAndCheckAuth(props.location.state?.galId, token)
             .then(res => {
                 setGallery(res.data)
                 fetchImages(res.data.id)
             })
             .catch(err => {
                 console.log(err)
-                console.log('error in auth')
                 history.push('/')
             })
     }
@@ -83,7 +81,6 @@ export default (props) => {
             })
             .catch(err => console.log(err))
     }
-    // console.log(props.location.state.galId)
     useEffect(() => {
         fetchGallery()
     }, [])
@@ -94,7 +91,7 @@ export default (props) => {
                     <Divider />
                     <Row style={{}} justify='space-between' align="middle">
                         <Col style={{ marginLeft: 20 }}>
-                            <div onClick={() => { gallery.is_publish ? history.push('/') : history.push('/gallery/owner/all') }}>
+                            <div onClick={() => { gallery.is_publish ? history.push('/') : history.push('/gallery/owner') }}>
                                 <ArrowLeftOutlined style={{ fontSize: '24px', color: '#08c' }} />
                             </div>
                         </Col>

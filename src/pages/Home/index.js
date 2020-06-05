@@ -25,12 +25,10 @@ export default () => {
     const profile = useSelector(state => state.profile)
     const [modalVisible, setModalVisible] = useState(false)
     const [key, setKey] = useState('')
-    console.log('token', token)
     const [gallerys, setGallerys] = useState([])
     const fetchGallerys = () => {
         listAllGalleries()
             .then(data => {
-                console.log(data)
                 setGallerys(data.data)
             })
             .catch(err => console.log(err))
@@ -39,7 +37,6 @@ export default () => {
     useEffect(() => {
         fetchGallerys()
     }, [])
-    console.log(profile)
     return (
         <>
             <Row justify={"center"} style={{ marginTop: 10, marginBottom: 5 }}>

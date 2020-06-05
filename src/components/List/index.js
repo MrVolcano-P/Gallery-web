@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, Typography, Checkbox, Space, Avatar, Row, Col } from 'antd'
 import { Button } from 'antd'; import { Link, useHistory } from 'react-router-dom';
-import { faBuilding, faUserTie, faFileAlt, faTable } from "@fortawesome/free-solid-svg-icons";
+import {  faUserTie, faFileAlt, faTable } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from 'moment'
 import styled from 'styled-components';
@@ -19,10 +19,6 @@ export default (props) => {
         color:#000
     }
 `
-    const Text = styled.p`
-    font-size:20;
-`   
-    const history = useHistory()
     return (
         <List
             itemLayout="vertical"

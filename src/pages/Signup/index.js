@@ -54,7 +54,6 @@ export default () => {
     const SetProfile = (token) => {
         getProfile(token)
             .then(res => {
-                console.log(res.data)
                 dispatch(setProfile(res.data))
                 history.push("/")
                 Success('Welcome')
@@ -70,11 +69,9 @@ export default () => {
                         password: "",
                     }}
                     onSubmit={(values, actions) => {
-                        console.log(JSON.stringify(values, null, 4))
                         signup(values).then(res => {
                             login({ Email: values.email, Password: values.password })
                                 .then(res => {
-                                    console.log(res.data)
                                     dispatch(setAuthToken(res.data.token))
                                     SetProfile(res.data.token)
                                 })

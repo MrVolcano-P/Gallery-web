@@ -47,11 +47,8 @@ export default () => {
                         name: profile.name,
                     }}
                     onSubmit={(values, actions) => {
-                        console.log(JSON.stringify(values, null, 4))
                         updateProfile({ "Name": values.name }, token)
                             .then(res => {
-                                console.log(res.data)
-                                console.log('Success')
                                 dispatch(setProfile(res.data))
                                 history.push('/user/profile')
                                 actions.setSubmitting(false)

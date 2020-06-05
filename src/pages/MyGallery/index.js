@@ -24,14 +24,12 @@ export default () => {
     const token = useSelector(state => state.authToken)
     const profile = useSelector(state => state.profile)
     const [modalVisible, setModalVisible] = useState(false)
-    console.log('token', token)
     const [name, setName] = useState('')
     const [gallerys, setGallerys] = useState([])
     const [key, setKey] = useState('')
     const fetchGallerys = () => {
         getGalleryByToken(token)
             .then(data => {
-                console.log(data)
                 setGallerys(data.data)
             })
             .catch(err => console.log(err))
@@ -39,7 +37,6 @@ export default () => {
     useEffect(() => {
         fetchGallerys()
     }, [])
-    console.log(gallerys)
     return (
         <>
             <Row justify={"center"} style={{ marginTop: 10, marginBottom: 5 }}>

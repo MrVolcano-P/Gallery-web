@@ -12,12 +12,9 @@ export default (props) => {
     const [antImages, setAntImages] = useState([]);
     const history = useHistory()
     const AddGallery = () => {
-        console.log(name)
         if (name !== '') {
             addGallery({ Name: name }, token)
                 .then(res => {
-                    console.log(res.data)
-                    // history.push('/gallery/' + res.data.id)
                     uploadImage(res.data.id)
                 })
                 .catch(err => console.log(err))
@@ -31,7 +28,6 @@ export default (props) => {
         onChange(info) {
             const { status } = info.file;
             if (status !== 'uploading') {
-                // console.log(info)
                 setAntImages(info.fileList.map((f) => f.originFileObj));
             }
             if (status === 'done') {
@@ -46,12 +42,8 @@ export default (props) => {
         for (let i = 0; i < antImages.length; i++) {
             form.append("photos", antImages[i]);
         }
-        console.log(form)
         upload(id, form, token)
             .then((res) => {
-                console.log('success')
-                // props.fetchImages()
-                // props.setVisible(false)
                 history.push({pathname:'/gallery',state:{galId:id}})
                 Success('Created New Gallery')
             })

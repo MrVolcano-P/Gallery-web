@@ -38,12 +38,12 @@ export default () => (
                 {/* <Gallery /> */}
             </Route>
             {/* <PrivateRoute exact path="/gallery/edit" component={EditGallery} /> */}
-            {/* <PrivateRoute path="/gallery/owner/all" component={MyGallery} /> */}
+            {/* <PrivateRoute path="/gallery/owner" component={MyGallery} /> */}
             {/* <PrivateRoute exact path="/user/profile" component={Profile} /> */}
             <Private path="/gallery/edit" component={EditGallery}>
                 <EditGallery />
             </Private>
-            <Private path="/gallery/owner/all">
+            <Private path="/gallery/owner">
                 <MyGallery />
             </Private>
             <Private path="/user/profile">

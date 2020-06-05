@@ -18,15 +18,11 @@ const RowMain = styled(Row)`
     }
 `
 export default (props) => {
-    console.log(props.images)
     const token = useSelector(state => state.authToken)
     const DeleteImage = (filename) => {
-        console.log(filename)
         let len = `${host}/upload/${props.galleryId}/`
-        console.log(filename.slice(len.length))
         deleteImage(props.galleryId, filename.slice(len.length), token)
             .then(res => {
-                console.log('success')
                 props.fetchImages()
                 Success('Deleted Image')
             })

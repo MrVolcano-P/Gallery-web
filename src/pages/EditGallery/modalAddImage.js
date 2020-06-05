@@ -25,12 +25,10 @@ export default function ModalAddImage(props) {
         },
     };
     const uploadImage = () => {
-        console.log(antImages);
         const form = new FormData();
         for (let i = 0; i < antImages.length; i++) {
             form.append("photos", antImages[i]);
         }
-        console.log(form)
         upload(props.galleryId, form, token)
             .then((res) => {
                 props.fetchImages()

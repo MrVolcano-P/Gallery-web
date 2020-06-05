@@ -60,7 +60,6 @@ export function login(data) {
     return axios.post(`${host}/login`, data)
 }
 export function logout(token) {
-    console.log('tokenAPi', token)
     return axios.post(`${host}/logout`, {}, {
         headers: {
             Authorization: `Bearer ${token}`
@@ -89,7 +88,6 @@ export function updateProfile(data, token) {
     })
 }
 export function deleteImages(id, data, token) {
-    console.log('tokenAPi', token)
     return axios.delete(`${host}/user/galleries/${id}/images`, {
         headers: {
             Authorization: `Bearer ${token}`
@@ -98,7 +96,6 @@ export function deleteImages(id, data, token) {
     })
 }
 export function deleteImage(id, filename, token) {
-    console.log('tokenAPi', token)
     return axios.delete(`${host}/user/galleries/${id}/images/${filename}`, {
         headers: {
             Authorization: `Bearer ${token}`

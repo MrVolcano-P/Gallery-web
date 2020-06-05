@@ -42,7 +42,6 @@ export default () => {
     const SetProfile = (token) => {
         getProfile(token)
             .then(res => {
-                console.log(res.data)
                 dispatch(setProfile(res.data))
                 history.push("/")
                 Success('Welcome')

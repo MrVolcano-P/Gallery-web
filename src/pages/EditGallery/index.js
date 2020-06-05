@@ -29,30 +29,25 @@ export default (props) => {
     const dispatch = useDispatch()
     const history = useHistory()
     const fetchGallery = () => {
-        getGalleryByid(props.location.state.galId)
+        getGalleryByid(props.location.state?.galId)
             .then(res => {
-                console.log(res.data)
                 setGallery(res.data)
                 setName(res.data.name)
                 fetchImages(res.data.id)
             })
             .catch(err => {
-                console.log(err.data)
-                console.log('error')
                 Error('This Gallery is in draft mode')
                 fetchGalleryAndCheckAuth()
             })
     }
     const fetchGalleryAndCheckAuth = () => {
-        getGalleryByidAndCheckAuth(props.location.state.galId, token)
+        getGalleryByidAndCheckAuth(props.location.state?.galId, token)
             .then(res => {
                 setGallery(res.data)
                 setName(res.data.name)
                 fetchImages(res.data.id)
             })
             .catch(err => {
-                console.log(err)
-                console.log('error in auth')
                 history.push('/')
                 Error('Not have permission')
             })
@@ -66,7 +61,6 @@ export default (props) => {
                         src: `${host}/${d.filename}`,
                     })
                 })
-                console.log(temp)
                 setImages(temp)
             })
             .catch(err => console.log(err))
@@ -76,7 +70,7 @@ export default (props) => {
     const DeleteGallery = useCallback(() => {
         deleteGallery(gallery.id, token)
             .then(res => {
-                history.push('/gallery/owner/all')
+                history.push('/gallery/owner')
                 Success('Deleted Gallery ' + gallery.name)
             })
             .catch(err => console.log(err))
@@ -92,7 +86,7 @@ export default (props) => {
                     <Divider />
                     <Row style={{}} justify='space-between' align="middle">
                         <Col style={{ marginLeft: 20 }}>
-                            <Link to={{ pathname:`/gallery`,state:{galId:props.location.state.galId}}}>
+                            <Link to={{ pathname:`/gallery`,state:{galId:props.location.state?.galId}}}>
                                 <ArrowLeftOutlined style={{ fontSize: '24px', color: '#08c' }} />
                             </Link>
                         </Col>
