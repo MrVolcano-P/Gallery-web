@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+  web:
+    build: .
+    container_name: gallery-web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./caddy_data:/data"
+      - "./Caddyfile:/etc/caddy/Caddyfile"

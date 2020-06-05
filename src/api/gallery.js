@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export const host = "http://localhost:8080"
+export const host = "https://galleryhub-api.chickenkiller.com"
 
 export function listAllGalleries() {
     return axios.get(`${host}/galleries`)

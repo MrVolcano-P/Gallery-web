@@ -2,13 +2,15 @@ FROM node:latest as builder
 
 WORKDIR /app
 
+RUN yarn add global react-scripts
+
 COPY package.json /app
 
 COPY yarn.lock /app
 
 RUN yarn install
 
-COPY . ./
+COPY . /app
 
 RUN yarn build
 

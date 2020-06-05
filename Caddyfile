@@ -1,0 +1,6 @@
+galleryhub.chickenkiller.com # For production  <--- เอา domain ที่เราอยากให้เป็นหน้าบ้านนะครับ
+# :80 # For local
+
+root * /app
+try_files {path} {path}/ /index.html
+file_server
