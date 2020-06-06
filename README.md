@@ -13,3 +13,6 @@
 - pagination
 - edit name gallery
 - upload gallery
+- lightbox show image
+- validation
+- message notify
