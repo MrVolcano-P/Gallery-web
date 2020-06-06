@@ -48,7 +48,7 @@ export default () => {
                         <Col span={8}>
                             <Search
                                 placeholder="input search text"
-                                onChange={(e) => setKey(e.target.value)}
+                                onChange={(e) => setKey(e.target.value.toLowerCase())}
                             />
                         </Col>
                         <Col span={8}>
@@ -67,7 +67,7 @@ export default () => {
             <Row justify={"center"}>
                 <Col span={16}>
                     <List
-                        data={gallerys.filter(g => g.name.includes(key))}
+                        data={gallerys.filter(g => g.name.toLowerCase().includes(key))}
                     />
                 </Col>
             </Row>
