@@ -5,7 +5,7 @@ services:
     build: .
     container_name: gallery-web
     ports:
-      - "80:80"
+      - "3000:80"
       - "443:443"
     volumes:
       - "./caddy_data:/data"
